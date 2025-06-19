@@ -3,8 +3,6 @@ import xhrClient from "./libs/xhrClient"
 
 $(document).on('click', "#btn_add_product", async function (e) {
     e.preventDefault();
-
-    // Clear any existing error messages
     $(".error-message").remove();
 
     const p_title = $(".product_title").val().trim();
@@ -13,45 +11,50 @@ $(document).on('click', "#btn_add_product", async function (e) {
     const p_price = getRawPrice(formatted_price); 
 
     let isValid = true;
-
-    // Validate product title
     if (!p_title) {
         isValid = false;
         $(".product_title").after('<small class="error-message text-danger">Book title is required.</small>');
     }
 
-    // Validate product price
-    if (!formatted_price) {
-        isValid = false;
-        $(".product_price_container").after('<small class="error-message text-danger">Product price is required.</small>');
-    } else if (isNaN(p_price)) {
-        isValid = false;
-        $(".product_price_container").after('<small class="error-message text-danger">Enter a valid number.</small>');
-    }
+    // if (!formatted_price) {
+    //     isValid = false;
+    //     $(".product_price_container").after('<small class="error-message text-danger">Product price is required.</small>');
+    // } else if (isNaN(p_price)) {
+    //     isValid = false;
+    //     $(".product_price_container").after('<small class="error-message text-danger">Enter a valid number.</small>');
+    // }
+    // if (!p_binding) {
+    //     isValid = false;
+    //     if ($(".product_binding").hasClass("select2-hidden-accessible")) {
+    //         $(".product_binding").next('.select2').after('<small class="error-message text-danger">Binding is required.</small>');
+    //     } else {
+    //         $(".product_binding").after('<small class="error-message text-danger">Binding is required.</small>');
+    //     }
+    // }
 
-    // Validate product binding
-    if (!p_binding) {
-        isValid = false;
 
-        // If using Select2, insert after the .select2-container
-        if ($(".product_binding").hasClass("select2-hidden-accessible")) {
-            $(".product_binding").next('.select2').after('<small class="error-message text-danger">Binding is required.</small>');
-        } else {
-            $(".product_binding").after('<small class="error-message text-danger">Binding is required.</small>');
-        }
-    }
-
-    // Stop if validation fails
     if (!isValid) return;
 
-    // Prepare data
     const data = {
         product_title: p_title,
         product_binding: p_binding,
         product_price: p_price
     };
+
+    const state = $(".form_state").val();
+    const productId = $("#product_id").val();
+    let endpoint = '';
+    let method = '';
+
+    if (state === 'edit') {
+        endpoint = base_url + 'api/edit_product/' + productId;
+        method = 'PUT';
+    } else {
+        endpoint = base_url + 'api/add_product';
+        method = 'POST';
+    }
     try {
-        const request = await xhrClient(base_url + 'api/add_product', 'POST', {
+        const request = await xhrClient(endpoint, method, {
             'Content-Type': 'application/json',
         }, data);
         Swal('Success', request.message, 'success');

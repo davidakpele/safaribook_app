@@ -61,8 +61,8 @@
                                         <th>Item No</th>
                                         <th><input type="checkbox" id="chk_all" value=""/></th>
                                         <th>Title</th>
-                                        <th>Price</th>
                                         <th>Binding</th>
+                                        <th>Price</th>
                                         <th>ACTION</th>
                                     </tr>
                                 </thead>

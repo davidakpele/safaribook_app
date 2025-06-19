@@ -82,8 +82,7 @@ $(document).on('click', ".delete-product", function (e) {
     var id = $(this).attr('data-delete-id');
 	let pushId = [];
     pushId.push(id);
-    const json_data = { ids: pushId };
-    let data = JSON.stringify(json_data);
+    const data = { ids: pushId };
     Swal.fire({
         title: "Are you sure?",
         text: "Data will be deleted!",
@@ -151,8 +150,7 @@ $(document).on('change', ".checkboxid", function (e) {
         $('#iz').hide();
         items[i].checked = false;
     }
-    const json_data = { ids: StringData };
-    let data = JSON.stringify(json_data);
+    const data = { ids: StringData };
     const element = document.getElementById('delete__Btn')
     element.addEventListener("click", () => {
         Swal.fire({
@@ -212,8 +210,7 @@ $(document).on('change', "#chk_all", function (e) {
         }
     }
     document.getElementById("deletebadge").innerHTML = count;
-    const json_data = { ids: pushId };
-    let data = JSON.stringify(json_data);
+    const data = { ids: pushId };
     const element = document.getElementById('delete__Btn')
     element.addEventListener("click", () => {
         Swal.fire({

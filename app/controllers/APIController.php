@@ -173,5 +173,40 @@ final class APIController extends Controller
         }
     }
     
+    public function edit_product($url){
+        if ($this->session->authCheck()) {
+            if ($this->entryHeaderHandle->CorsHeader()) {
+                $requestHandler = new RequestHandler($this->entryHeaderHandle);
+                if (RequestHandler::isRequestMethod('PUT')) {
+                    $urlParts = explode('/', $url); 
+                    $controller = !empty($urlParts[0])? $urlParts[0] : '';
+                    $controllerName = $controller;
+                    $id= trim(filter_var((int)$controllerName, FILTER_SANITIZE_NUMBER_INT)); 
+
+                    $jsonString = file_get_contents("php://input");
+                    $response = array();
+                    $phpObject = json_decode($jsonString);
+                    $product_title=$phpObject->{'product_title'};
+                    $product_binding=$phpObject->{'product_binding'};
+                    $product_price=$phpObject->{'product_price'};
+                    if($this->repository->update_product($id, $product_title, $product_binding, $product_price)){
+                        $response['message']= 'Product Successfully Updated.';
+                        http_response_code(201);
+                    }else {
+                        $response['message']= 'Sorry..! Something Happen At The Database Process.';
+                        http_response_code(401);
+                    };
+                    header("Content-Type: application/json");
+                    echo json_encode($response, JSON_PRETTY_PRINT);
+                }else{
+                    $this->entryHeaderHandle->sendErrorResponse("Method Not Allowed", 405);
+                    }
+            }else{
+                $this->entryHeaderHandle->sendErrorResponse("Cors misconfigured.", 400);
+                }
+        }else{
+            $this->entryHeaderHandle->sendErrorResponse("Access denied", 401);
+        }
+    }
 
 }

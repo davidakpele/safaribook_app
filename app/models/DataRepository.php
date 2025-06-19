@@ -56,22 +56,52 @@ final class DataRepository
         }
     }
 
-    public function delete_product($id){
-		$i = implode(',', $id);
-		$this->_connect_db->query(/** @lang text */"DELETE FROM books WHERE id IN (".$i.")");
-		$this->_connect_db->bind(':id', $id);
-		if($this->_connect_db->execute()){
-			return true;
-		}else{
-			return false;
-		}
-	}
+    public function delete_product($ids) {
+        if (!is_array($ids) || empty($ids)) return false;
+        $placeholders = [];
+        foreach ($ids as $index => $val) {
+            $placeholders[] = ":id{$index}";
+        }
+        $inClause = implode(',', $placeholders);
+        $sql = "DELETE FROM books WHERE id IN ($inClause)";
+    
+        $this->_connect_db->query($sql);
+        foreach ($ids as $index => $val) {
+            $this->_connect_db->bind(":id{$index}", $val);
+        }
+        return $this->_connect_db->execute();
+    }
+    
 
     public function add_product($product_title, $product_binding, $product_price){
         $this->_connect_db->query(/** @lang text */"INSERT INTO `books`(title, binding, sale_price) VALUES (:product_title, :product_binding, :product_price)");
         $this->_connect_db->bind(':product_title', $product_title);
         $this->_connect_db->bind(':product_binding', $product_binding);
         $this->_connect_db->bind(':product_price', $product_price);
+        if($this->_connect_db->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function edit_product($id){
+        $this->_connect_db->query(/** @lang text */"SELECT * FROM `books` WHERE id =:id ");
+        $this->_connect_db->bind(':id', $id);
+        $row = $this->_connect_db->single();
+        if(!empty($row)){
+            return $row;
+        }else{
+            return false;
+        }
+    }
+
+    public function update_product($id, $product_title, $product_binding, $product_price){
+        $this->_connect_db->query(/** @lang text */"UPDATE `books` SET title=:product_title, binding=:product_binding, sale_price=:product_price WHERE id=:id");
+        $this->_connect_db->bind(':product_title', $product_title);
+        $this->_connect_db->bind(':product_binding', $product_binding);
+        $this->_connect_db->bind(':product_price', $product_price);
+        $this->_connect_db->bind(':id', $id);
         if($this->_connect_db->execute()){
             return true;
         }else{

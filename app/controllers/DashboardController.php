@@ -1,6 +1,8 @@
 <?php
 
 use Session\AuthSession;
+use Exception\RequestException;
+use Request\RequestHandler;
 
 final class DashboardController extends Controller
 {
@@ -11,6 +13,8 @@ final class DashboardController extends Controller
     public function __construct() {
         $this->session= new AuthSession();
         $this->repository = $this->loadModel('User');
+        $this->data_repository = $this->loadModel('DataRepository');
+        $this->entryHeaderHandle =new RequestException();
     }
 
     public function index(){
@@ -97,32 +101,40 @@ final class DashboardController extends Controller
     }
 
     public function create_product(){
-
         if ($this->session->authCheck()) {
-            $action = isset($_GET['action']) ? $_GET['action'] :null;
-            if($action == null || $action ==""){
-                $response['message']= 'Sorry..! Provide action base parameter.';
-                http_response_code(401);
-                header("Content-Type: application/json");
-                echo json_encode($response, JSON_PRETTY_PRINT);
+            if ($this->entryHeaderHandle->CorsHeader()) {
+                $requestHandler = new RequestHandler($this->entryHeaderHandle);
+                if (RequestHandler::isRequestMethod('GET')) {
+                    $action = isset($_GET['action']) ? $_GET['action'] :null;
+                    if($action == null || $action ==""){
+                        $response['message']= 'Sorry..! Provide action base parameter.';
+                        http_response_code(401);
+                        header("Content-Type: application/json");
+                        echo json_encode($response, JSON_PRETTY_PRINT);
+                    }else{
+                        if($action =='edit_stock'){
+                            $id = strip_tags(trim(filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT)));
+                            $product_edit =  $this->data_repository->edit_product($id);
+                        }
+                        $data = [
+                            'page_title' => $action == 'edit_stock' ? 'Edit Book' : 'Create New Book',
+                            'settings' => [
+                                'company_name' => 'SAFARI BOOKS LIMITED'
+                            ]
+                        ] + ($action == 'edit_stock' ? ['edit_product' => $product_edit] : []);
+                        
+                        $this->view("dashboard/create_form", $data);
+                    }
+                }else{
+                    $this->entryHeaderHandle->sendErrorResponse("Method Not Allowed", 405);
+                }
             }else{
-
-                $data = [
-                    'page_title'=>  $action =='edit_stock' ? 'Edit Book' : 'Create New Book',
-                    'settings'=>[
-                        'company_name'=> 'SAFARI BOOKS LIMITED'
-                    ],
-                ];
-                $this->view("dashboard/create_form", $data);
+                $this->entryHeaderHandle->sendErrorResponse("Cors misconfigured.", 400);
             }
-           
         }else{
-            redirect("auth/logout");
+            $this->entryHeaderHandle->sendErrorResponse("Access denied", 401);
         }
     }
-
-
-    
 
     
 }
