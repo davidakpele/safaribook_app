@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 17, 2025 at 04:35 PM
+-- Generation Time: Jun 19, 2025 at 11:54 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `safaribooks_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `books`
+--
+
+CREATE TABLE `books` (
+  `id` bigint(20) NOT NULL,
+  `title` text NOT NULL,
+  `binding` enum('HB','PB','','') NOT NULL,
+  `sale_price` decimal(10,2) NOT NULL DEFAULT 0.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `books`
+--
+
+INSERT INTO `books` (`id`, `title`, `binding`, `sale_price`) VALUES
+(1, 'Book A', 'HB', 3453453.00);
 
 -- --------------------------------------------------------
 
@@ -151,6 +171,12 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `role_id`, `telephone`, 
 --
 
 --
+-- Indexes for table `books`
+--
+ALTER TABLE `books`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `commercial_invoice_number`
 --
 ALTER TABLE `commercial_invoice_number`
@@ -193,6 +219,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `books`
+--
+ALTER TABLE `books`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `commercial_invoice_number`
