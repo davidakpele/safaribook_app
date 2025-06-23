@@ -13,8 +13,7 @@ function redirect($url=''){
 }
 
 function dnd($data){
-	echo "<pre>";
-	print_r($data);
-	echo "</pre>";
+    header("Content-Type: application/json");
+    echo json_encode($data, JSON_PRETTY_PRINT);
 	die();
 }

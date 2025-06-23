@@ -1,6 +1,5 @@
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">MAIN MENU</li>
-    <!-- Optionally, you can add icons to the links -->
         <li class="active">
             <a href="<?=ROOT?>dashboard">
                 <i class="fa fa-dashboard"></i> 
@@ -59,12 +58,12 @@
         </li>
             <li class="header">SETTINGS</li>
                 <li class="">
-                    <a href="<?=ROOT?>users" rel="noopener noreferrer">
+                    <a href="<?=ROOT?>user/list" rel="noopener noreferrer">
                         <i class="fa fa-users"></i> <span>User Management</span>
                     </a>
                 </li>
                 <li class="">
-                    <a href="<?=ROOT?>settings?action=role" rel="noopener noreferrer">
+                    <a href="<?=ROOT?>dashboard/settings" rel="noopener noreferrer">
                         <i class="fa fa-cogs"></i> <span>Settings</span>
                     </a>
                 </li>

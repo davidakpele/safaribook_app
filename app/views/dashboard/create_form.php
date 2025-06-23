@@ -52,13 +52,17 @@
 										</div>
 									</div>
 
-									<div class="col-md-4 col-sm-12 col-xs-12">
+									<div class="col-md-6 col-sm-12 col-xs-12">
 										<label for="binding">Binding*</label>
-										<select name="binding" id="binding" class="product_binding form-control select2">
+                                        <div class="full-width" style="width:100% !important">
+
+                                        
+										<select name="binding" id="binding" class="product_binding form-control select2" style="width:100% !important">
 											<option value="" <?= !isset($data['edit_product']) ? 'selected' : '' ?>>--Select--</option>
 											<option value="HB" <?= (isset($data['edit_product']) && $data['edit_product']->binding === 'HB') ? 'selected' : '' ?>>HB</option>
 											<option value="PB" <?= (isset($data['edit_product']) && $data['edit_product']->binding === 'PB') ? 'selected' : '' ?>>PB</option>
 										</select>
+                                    </div>
 									</div>
 								</div>
 								<div class="col-md-12" id="guidanceform"></div>

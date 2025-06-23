@@ -1,5 +1,10 @@
+import xhrClient from "./libs/xhrClient" 
+
+
 $(document).ready(() => {
+ 
     $("#error").hide();
+    $(".statusMsg").hide();
 
     $('#signIn_form').submit((e) => {
         e.preventDefault();
@@ -53,4 +58,8 @@ $(document).ready(() => {
             }
         });
     });
+
+  
 });
+
+

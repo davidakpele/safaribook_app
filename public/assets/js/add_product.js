@@ -57,12 +57,12 @@ $(document).on('click', "#btn_add_product", async function (e) {
         const request = await xhrClient(endpoint, method, {
             'Content-Type': 'application/json',
         }, data);
-        Swal('Success', request.message, 'success');
+        Swal.fire('Success', request.message, 'success');
         setTimeout(function () {
             window.location.reload(1);
         }, 500);
     } catch (error) {
-        Swal({
+        Swal.fire({
             title: "Failed",
             text: error,
             type: "error",

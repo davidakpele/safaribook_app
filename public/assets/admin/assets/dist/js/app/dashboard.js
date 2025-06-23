@@ -46,8 +46,8 @@ $(document).ready(function(){
 			cancelButtonColor: '#d33',
 			confirmButtonText: 'Yeah, Logout!'
 		}).then((result) => {
-			if(result.value){
-				location.href=base_url+"PageController/Logout";
+			if(result){
+				location.href=base_url+"auth/logout";
 			}
 		});
 	});

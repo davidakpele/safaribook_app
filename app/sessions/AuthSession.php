@@ -17,8 +17,10 @@ class AuthSession{
 
     public function destroy():bool {
         if (session_status() == PHP_SESSION_ACTIVE) {
-            session_unset();
-            session_destroy();
+            unset($_SESSION['userId']);
+            unset($_SESSION['email']);
+            unset($_SESSION['name']);
+            unset($_SESSION['role_name']);
             return true;
         }else{
             return false;

@@ -32,7 +32,7 @@
 
   <form method="post" id="create_invoice">
       <div class="row">
-        <div class="col-xs-6">
+        <div class="col-md-6 col-xs-12 col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="float-left">Customer Information</h4>
@@ -86,7 +86,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-6">
+        <div class="col-md-6 col-xs-12 col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4> Invoice To</h4>
@@ -229,7 +229,7 @@
 </div>
     </div>
 <?php include_once 'components/Footer.php';?>
-<script src="<?=ASSETS?>js/main.js"></script>
+<script type="module" src="<?=ASSETS?>js/main.js"></script>
 <script type="text/javascript">
     $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings) {
         return {

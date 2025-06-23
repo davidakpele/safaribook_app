@@ -75,6 +75,11 @@ class Database {
 		return $this->statement->fetchAll(PDO::FETCH_ASSOC);
 	}
 
+	public function fetchAll(){
+		$this->execute();
+		return $this->statement->fetchAll(PDO::FETCH_ASSOC);
+	}
+
 	// Fetch method returns array
 	public function PDOARRAYFETCH(){
 		$this->execute();

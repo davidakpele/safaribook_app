@@ -1,7 +1,6 @@
 import xhrClient from "./libs/xhrClient"
-
 var count;
-const table = $("#stock-list-table").DataTable({
+const table = $("#invoice-list-table").DataTable({
     dom:
     "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
     "<'row'<'col-sm-12'tr>>" +
@@ -16,22 +15,14 @@ const table = $("#stock-list-table").DataTable({
         sProcessing: "loading..."
     },
     processing: true,
+
 });
 $('#iz').hide();
 
-function formatCurrency(amount) {
-	return new Intl.NumberFormat('en-NG', {
-		style: 'currency',
-		currency: 'NGN',
-		minimumFractionDigits: 2,
-		maximumFractionDigits: 2
-	}).format(amount).replace('NGN', 'NGN ');
-}
 
-function getStockList() {
-	const apiUrl = base_url + 'api/books';
-	
-    let item_number = 1;
+async function getAllInvoiceList() {
+	const apiUrl = base_url + 'api/invoice_list';
+	let item_number = 1;
 	fetch(apiUrl)
 		.then(response => {
 			if (!response.ok) throw new Error('Network response was not ok');
@@ -39,94 +30,88 @@ function getStockList() {
 		})
 		.then(data => {
 			table.clear();
-            data.forEach(book => {
-               
-                table.row.add([
-                    `<span style="color:#49474; font-weight:normal; width:12px">${item_number}</span>`,
-					`<input type="checkbox" id="dataX" class="checkboxid" name="checkproduct[]" value="${book.id}"/>`,
-                    `<span  class="company-table-content-display-lg">${book.title}</span>`,
-                    `<span class="binding-column">${book.binding}</span>`,
-					`<span style="color:#49474; font-weight:normal" data-product-price=${book.sale_price}>${formatCurrency(book.sale_price)}</span>`,
-					`<div class="dropdown">
+            data.forEach(invoice => {
+				table.row.add([
+                    `<span style="color:#49474; font-weight:normal">${item_number}</span>`,
+                    `<input type="checkbox" id="dataX" class="checkboxid" name="checkinvoice[]" value="${invoice.invoice_id}"/>`,
+					`<span style="color:#49474; font-weight:normal; font-size:12px">${invoice.invoice_number}</span>`,
+                    `<span style="color:#49474; font-weight:normal; font-size:12px">${invoice.client_name}</span>`,
+					`<span style="color:#49474; font-weight:normal; font-size:12px">${invoice.invoice_date}</span>`,
+                    `<span style="color:#49474; font-weight:normal; font-size:12px">${invoice.invoice_type}</span>`,
+                    `<span style="color:#49474; font-weight:normal; font-size:12px">${invoice.name}</span>`,
+                    `<div class="dropdown">
                         <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                             Action&nbsp;&nbsp;<i class="fa fa-caret-down" aria-hidden="true" style="font-size:12px"></i>
                             <span class="sr-only">Dropdown</span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:14px">
-                            <a class="dropdown-item" href="${base_url}dashboard/create_product?action=edit_stock&id=${book.id}">
+                            <a class="dropdown-item" href="${base_url}dashboard/edit_invoice?action=edit&id=${invoice.invoice_id}">
                                 <span class="fa fa-edit text-primary"></span>
                                 &nbsp;&nbsp;Edit
                             </a>
                             <div class="dropdown-divider"></div>
-                            <span class="dropdown-item delete-product" data-delete-id="${book.id}"  style="cursor:pointer">
+                            <span class="dropdown-item delete-invoice" data-delete-id="${invoice.invoice_id}"  style="cursor:pointer">
                                 <span class="fa fa-trash text-danger"></span>
                                 &nbsp;Delete
                             </span>
                         </div>
                     </div>`
-                ]).draw();
-                item_number++;
+				]).draw();
+				item_number++;
 			});
 		})
-        .catch(error => {
-            Swal.fire({
-                title: "Failed",
-                text: error,
-                type: "error",
-                color: '#716add',
-                background: '#fff',
-                backdrop: `rgba(0,0,123,0.4)`,
-                timer: 2500,
-            });
+		.catch(error => {
+			console.error('Error fetching invoices list:', error);
 		});
 }
 
-getStockList();
+await getAllInvoiceList();
 
-$(document).on('click', ".delete-product", function (e) {
-  e.preventDefault();
-    var id = $(this).attr('data-delete-id');
-	let pushId = [];
-    pushId.push(id);
-    const data = { ids: pushId };
-    Swal.fire({
-        title: "Are you sure?",
-        text: "Data will be deleted!",
-        type: "question",
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        background: '#fff',
-        backdrop: `rgba(0,0,123,0.4)`,
-        confirmButtonText: 'Yes, Delete!',
-    }).then(async (result) => {
-        if (result.value) {
-            try {
-                const request = await xhrClient(base_url+'api/delete_stock', 'DELETE', {
-                    'Content-Type': 'application/json',
-                }, data);
-        
-                Swal.fire('Success', request.message, 'success');
-                setTimeout(function() {
-                    window.location.reload(1);
-                }, 500);
-            } catch (error) { 
-                Swal.fire({
-                    title: "Failed",
-                    text: error,
-                    type: "error",
-                    color: '#716add',
-                    background: '#fff',
-                    backdrop: `rgba(0,0,123,0.4)`,
-                    timer: 2500,
-                    });
-            }
-        } else {
-            return false;
-        }
-    });
-});
 
+$(document).on('click', ".delete-invoice", function (e) {
+    e.preventDefault();
+      var id = $(this).attr('data-delete-id');
+      let pushId = [];
+      pushId.push(id);
+      const data = { ids: pushId };
+      Swal.fire({
+          title: "Are you sure?",
+          text: "Data will be deleted!",
+          type: "question",
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          background: '#fff',
+          backdrop: `rgba(0,0,123,0.4)`,
+          confirmButtonText: 'Yes, Delete!',
+      }).then(async (result) => {
+          if (result.value) {
+              try {
+                  const request = await xhrClient(base_url+'api/delete_invoice', 'DELETE', {
+                      'Content-Type': 'application/json',
+                  }, data);
+          
+                  Swal.fire('Success', request.message, 'success');
+                  setTimeout(function() {
+                      window.location.reload(1);
+                  }, 500);
+              } catch (error) { 
+                  Swal.fire({
+                      title: "Failed",
+                      text: error,
+                      type: "error",
+                      color: '#716add',
+                      background: '#fff',
+                      backdrop: `rgba(0,0,123,0.4)`,
+                      timer: 2500,
+                      });
+              }
+          } else {
+              return false;
+          }
+      });
+  });
+  
 $(document).on('change', ".checkboxid", function (e) { 
     let items = $('.checkboxid');
     let StringData = [];
@@ -172,7 +157,7 @@ $(document).on('change', ".checkboxid", function (e) {
         }).then(async (result) => {
             if (result.value) {
                 try {
-                    const request = await xhrClient(base_url+'api/delete_stock', 'DELETE', {
+                    const request = await xhrClient(base_url+'api/delete_invoice', 'DELETE', {
                         'Content-Type': 'application/json',
                     }, data);
                     Swal.fire('Success', request.message, 'success');
@@ -196,7 +181,7 @@ $(document).on('change', ".checkboxid", function (e) {
         });
     });
 })
-
+  
 $(document).on('change', "#chk_all", function (e) { 
     let inputs = $(".checkboxid");
     count = 0;
@@ -232,7 +217,7 @@ $(document).on('change', "#chk_all", function (e) {
         }).then(async (result) => {
             if (result.value) {
                 try {
-                    const request = await xhrClient(base_url+'api/delete_stock', 'DELETE', {
+                    const request = await xhrClient(base_url+'api/delete_invoice', 'DELETE', {
                         'Content-Type': 'application/json',
                     }, data);
                     Swal.fire('Success', request.message, 'success');
@@ -248,7 +233,7 @@ $(document).on('change', "#chk_all", function (e) {
                         background: '#fff',
                         backdrop: `rgba(0,0,123,0.4)`,
                         timer: 2500,
-                    });
+                        });
                 }
             } else {
                 return false;
@@ -256,20 +241,8 @@ $(document).on('change', "#chk_all", function (e) {
         });
     });
 });
-
+  
 
 table.on('click', 'tbody tr', function (e) {
     e.currentTarget.classList.toggle('selected');
 });
-
-$(document).ready(() => { 
-    $('#stock-list-table th:nth-child(1), #stock-list-table td:nth-child(1)').css('width', '20px');
-    $('#stock-list-table th:nth-child(2), #stock-list-table td:nth-child(2)').css('width', '10px');
-    $('#stock-list-table th:nth-child(4), #stock-list-table td:nth-child(4)').css('width', '80px');
-    $('#stock-list-table th:nth-child(3), #stock-list-table td:nth-child(3)').css('width', '10px');
-    $('#stock-list-table th:nth-child(5), #stock-list-table td:nth-child(5)').css('width', '50px');
-    $('#stock-list-table th:nth-child(6), #stock-list-table td:nth-child(6)').css('width', '80px');
-});
-// document.querySelector('#button').addEventListener('click', function () {
-//     alert(table.rows('.selected').data().length + ' row(s) selected');
-// });

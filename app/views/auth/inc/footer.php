@@ -10,6 +10,6 @@
                 </div>
             </div>
         </div>
-    <script src="<?=ASSETS?>js/auth.js"></script>
+    <script type="module"  src="<?=ASSETS?>js/auth.js"></script>
     </body>
 </html>

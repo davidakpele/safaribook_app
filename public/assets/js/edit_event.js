@@ -1,93 +1,155 @@
-import xhrClient from "./libs/xhrClient"
-import modal from "./libs/modal";
-import util from "./libs/util"
 
+import util from "./libs/util";
+import modal from "./libs/modal";
+import xhrClient from "./libs/xhrClient"
+
+
+var util_ = new util();
 var modalControler = new modal();
-var utilClass = new util();
-// invoice Initialize with one section
+modalControler.controller();
+
 let sectionCount = 1;
 let itemCount = 1;
-let bank_name ="", account_name ="" , account_number ="";
-var company_detail =
-{
-	company_name: '',
-	company_tagline:'', 
-	company_logo: '',
-	company_icon_logo: '',
-	company_rc: '',
-	company_email:'',
-	company_address:'',
-	company_telephone:'',
-	company_website:'',
-	company_country:''
-}
-	
-var client_name = "", client_city = "";
-var table, selectedPaymentMethod;
-let description, unitPrice;
-var currentRow;
-var sectionSubtotal;
-let customer_relation_id;
-let invoice_date;
-var payload_items = [];
-var payload ={};
+var bank_name = "", account_name = "", account_number = "";
+var count, customer_relation_id, selectedPaymentMethod;
 let customer_name = document.querySelector(".customer_name").value;
 let invoice_number = document.querySelector(".customer_invoice_no").value;
 let customer_telephone = document.querySelector(".customer_telephone").value;
+var selectedPaymentMethod;
+let description, unitPrice;
+var client_name = "", client_city = "";
+var currentRow;
+var sectionSubtotal;
+let invoice_date;
 let grandTotal;
+var payload_items = [];
+var payload ={};
+const table = $("#invoice-list-table").DataTable({
+    dom:
+    "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
+    "<'row'<'col-sm-12'tr>>" +
+    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+    buttons: [
+        'csv',
+        'excel',
+        'pdf',
+        'print'
+    ],
+    oLanguage: {
+        sProcessing: "loading..."
+    },
+    processing: true,
 
-var dateFormat = $(this).attr('data-vat-rate');
-
-$(document).ready(() => { 
-	modalControler.controller();
 });
-
-$('#invoice_date, #invoice_due_date').datetimepicker({
-	showClose: false,
-	format: dateFormat
-});
+$('#iz').hide();
 
 
-function formatDateTime(dateString) {
-	const date = new Date(dateString);
-	const options = {
-		day: '2-digit',
-		month: 'long',
-		year: 'numeric',
-		hour: 'numeric',
-		minute: '2-digit',
-		hour12: true
-	};
-	return date.toLocaleString('en-US', options);
+util_.getPaymentDetails();
+util_.getBookList();
+util_.getUsersList();
+
+// Get the ID from URL
+const invoiceId = util_.getUrlParameter('id');
+
+if (invoiceId) {
+    util_.getInvoiceById(invoiceId)
+        .then(data => {
+            if (data) {
+                // Basic fields
+                document.querySelector('.client_name').value = data.invoice.client_name;
+                document.querySelector('.client_city').value = data.invoice.client_city;
+                document.querySelector('.customer_name').value = data.invoice.officer;
+                document.querySelector('.customer_invoice_no').value = data.invoice.invoice_number;
+                document.querySelector('.customer_shipping_via').value = data.invoice.shipping_via;
+                document.querySelector('.customer_reference').value = data.invoice.customer_reference;
+                document.querySelector('.customer_telephone').value = data.invoice.office_telephone;
+            
+                const _efdate = util_.reformate_date_back_to_normal(data.invoice.invoice_date);
+                document.querySelector('.due_date').value = _efdate;
+                customer_name = data.invoice.officer;
+                customer_telephone = data.invoice.office_telephone;
+                // Payment method selection and variable extraction
+                const paymentId = data.invoice.paymentMethod.id;
+                $("#bank-select option").each(function () {
+                    if ($(this).attr('data-bank-container-id') == paymentId) {
+                        $(this).prop('selected', true);
+                    }
+                });
+            
+                // Set bank/account variables after selection
+                const selectedOption = $("#bank-select option:selected");
+                bank_name = selectedOption.data('bankName') || '';
+                account_name = selectedOption.data('accountHolderName') || '';
+                account_number = selectedOption.data('accountNumber') || '';
+            
+                // customer relational detail and payment details Id
+                customer_relation_id = data.invoice.customer_id;
+                selectedPaymentMethod = data.invoice.paymentMethod.id;
+            
+
+                // Inject sections/items here:
+                document.getElementById('sections-container').innerHTML = '';
+                sectionCount = 1;
+                itemCount = 1;
+
+                data.sections.forEach((sectionBlock, sectionIndex) => {
+                    const labelKey = Object.keys(sectionBlock)[0];
+                    const sectionData = sectionBlock[labelKey][0];
+                    const discountPercent = parseFloat(sectionData.discount_percent) || 0;
+                    const items = sectionData.items;
+
+                    addSection(true);
+                    const currentSectionId = sectionCount - 1;
+                    const sectionEl = document.querySelector(`.invoice-section[data-section-id="${currentSectionId}"]`);
+
+                    if (sectionEl) {
+                        const discountInput = sectionEl.querySelector('.section-discount');
+                        if (discountInput) discountInput.value = discountPercent;
+
+                        items.forEach(item => {
+                            addItemToSection(currentSectionId);
+                            const rows = sectionEl.querySelectorAll('.item-row');
+                            const row = rows[rows.length - 1];
+                            if (row) {
+                                row.querySelector('.product_item_id').value = item.product.id;
+                                row.querySelector('.product_description').value = item.product.title;
+                                row.querySelector('.quantity').value = item.quantity;
+                                row.querySelector('.unit-price').value = item.unit_price;
+                                row.querySelector('.item-total').value = parseFloat(item.total).toFixed(2);
+
+                                row.querySelector('.quantity').dispatchEvent(new Event('input'));
+                                row.querySelector('.unit-price').dispatchEvent(new Event('input'));
+                            }
+                        });
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            $.jGrowl("Error", {
+                header: error
+            });
+        });
+} else {
+    $.jGrowl("Error", {
+        header: 'No invoice ID specified in URL'
+    });
 }
 
-function addFieldError(inputElement, message) {
-	const formGroup = inputElement.closest(".form-group");
-	formGroup.classList.add("has-error");
-	let errorMsg = formGroup.querySelector(".help-block-error-msg");
-	if (!errorMsg) {
-		errorMsg = document.createElement("small");
-		errorMsg.className = "help-block-error-msg";
-		errorMsg.style.color = "#dd4b39";
-		formGroup.appendChild(errorMsg);
-	}
-	errorMsg.textContent = message;
-}
-
-function addSection() {
+function addSection(skipDefaultRow = false) {
 	const container = document.getElementById('sections-container');
 	const sectionDiv = document.createElement('div');
 	sectionDiv.className = 'invoice-section';
 	const currentSectionId = sectionCount;
 	sectionDiv.dataset.sectionId = currentSectionId;
-	
+
 	sectionDiv.innerHTML = `
 		<div class="section-controls">
 			<h3>Section ${String.fromCharCode(64 + currentSectionId)}</h3>
 			<div>
 				<label>Discount (%): </label>
 				<div style="display:flex;justify-items: flex-end;">
-				<input type="number"  class="form-control section-discount" min="0" max="100" id="section-discount" value="${currentSectionId === 1 ? 20 : 10}" style="width:100px">
+				<input type="number" class="form-control section-discount" min="0" max="100" id="section-discount" value="${currentSectionId === 1 ? 20 : 10}" style="width:100px">
 				<button class="btn btn-sm btn-danger remove-section" type="button" style="margin-left:10px">Remove Section</button>
 				</div>
 			</div>
@@ -111,43 +173,44 @@ function addSection() {
 					</td>
 				</tr>
 			</tfoot>
-		</table>
-	`;
-	
+		</table>`;
+
 	container.appendChild(sectionDiv);
 
 	const addItemBtn = sectionDiv.querySelector('.add-item');
 	if (addItemBtn) {
-		addItemBtn.addEventListener('click', function() {
+		addItemBtn.addEventListener('click', function () {
 			addItemToSection(currentSectionId);
 		});
 	}
-	
+
 	const removeSectionBtn = sectionDiv.querySelector('.remove-section');
 	if (removeSectionBtn) {
-		removeSectionBtn.addEventListener('click', function() {
+		removeSectionBtn.addEventListener('click', function () {
 			Swal.fire({
-				title: 'Are you sure?',
-				text: "This section and all its items will be removed.",
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#d33',
-				cancelButtonColor: '#3085d6',
-				confirmButtonText: 'Yes, remove it!',
-				cancelButtonText: 'Cancel'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					sectionDiv.remove();
-					renumberSections();
-					$.jGrowl("Removed", { header: "Section removed successfully" });
-				}
-			});
-			
+                title: 'Are you sure?',
+                text: "This section and all its items will be removed.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, remove it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    sectionDiv.remove();
+                    renumberSections();
+                    $.jGrowl("Removed", { header: "Section removed successfully" });
+                }
+            });
+            
 		});
 	}
-	
-	addItemToSection(currentSectionId);
-	
+
+    if (!skipDefaultRow) {
+		addItemToSection(currentSectionId);
+	}
+
 	sectionCount++;
 }
 
@@ -244,22 +307,6 @@ function addRowEventListeners(row) {
     });
 }
 
-function renumberItemsInSection(tbody) {
-	const rows = tbody.querySelectorAll('tr');
-	rows.forEach((row, index) => {
-		row.cells[0].textContent = index + 1;
-	});
-}
-
-function renumberSections() {
-	const sections = document.querySelectorAll('.invoice-section');
-	sections.forEach((section, index) => {
-		section.dataset.sectionId = index + 1;
-		section.querySelector('h3').textContent = `Section ${String.fromCharCode(65 + index)}`;
-	});
-	sectionCount = sections.length + 1;
-}
-
 function formatCurrency(amount) {
 	return new Intl.NumberFormat('en-NG', {
 		style: 'currency',
@@ -273,7 +320,7 @@ function generateInvoice() {
 	const errors = [];
 	payload =  {};
 	payload_items = [];
-	$('.manually-added-empty-row').removeClass('hidden');
+	$('.manually-added-empty-row-button').removeClass('hidden');
 
 	const customerNameInput = document.querySelector(".customer_name");
 	const invoiceNumberInput = document.querySelector(".customer_invoice_no");
@@ -312,11 +359,11 @@ function generateInvoice() {
 		return;
 	}
 
-	invoice_date = utilClass.formatDateForInvoice(invoiceDateInput.value);
+	invoice_date = util_.formatDateForInvoice(invoiceDateInput.value);
 	invoice_number = invoiceNumberInput.value;
 	client_name = clientNameInput.value;
 	client_city = clientCityInput.value;
-
+    
 	let html = `
 				<div id="preview_invoice">
 					<div id="preview_invoice" style="font-family: Arial, sans-serif; padding: 20px;">
@@ -359,7 +406,7 @@ function generateInvoice() {
 					<tr>
 						<td><span class="invoice-content">${customer_name}<br><span style="display:flex"><b>Tel:</b> ${customer_telephone}</span></span></td>
 						<td><span class="invoice-content">${invoice_number}</span></td>
-						<td><span class="invoice-content">Date: ${invoice_date}</span></td>
+						<td><span class="invoice-content" style="display:flex; width:120px">Date: ${invoice_date}</span></td>
 						<td></td>
 						<td></td>
 						<td><span class="invoice-content">Due on receipt</span></td>
@@ -517,46 +564,59 @@ function generateInvoice() {
 	}
 }
 
-// Event listeners
-document.getElementById('add-section').addEventListener('click', addSection);
 document.getElementById('calculate').addEventListener('click', generateInvoice);
 
-async function save_invoice() { 
-	try {
-        const request = await xhrClient( base_url + 'api/save_invoice', 'POST', {
-            'Content-Type': 'application/json',
-        }, payload);
-        Swal.fire('Success', request.message, 'success');
-        // setTimeout(function () {
-        //     window.location.reload(1);
-        // }, 500);
-    } catch (error) {
-        Swa.fire({
-            title: "Failed",
-            text: error,
-            type: "error",
-            color: '#716add',
-            background: '#fff',
-            backdrop: `rgba(0,0,123,0.4)`,
-            timer: 2500,
-        });
-    }
-}
+document.getElementById('add-section').addEventListener('click', () => {
+    addSection(false)
+});
 
 document.getElementById('print-invoice').addEventListener('click', async () => {
+    const result = await Swal.fire({
+        title: 'What would you like to do?',
+        icon: "question",
+        showDenyButton: true,
+        showCancelButton: true,
+        showCloseButton: true,
+        focusConfirm: false,
+        confirmButtonText: 'Update and Print',
+        denyButtonText: `Update Only`,
+        cancelButtonText: 'Cancel',
+        color: '#716add',
+        background: '#fff',
+        backdrop: `rgba(0,0,123,0.4)`,
+    });
+  
+    if (result.isConfirmed) {
+        await handleUpdateAndPrint();
+    } else if (result.isDenied) {
+        await update_invoice();
+        $.jGrowl("Saved", {
+            header: 'Invoice updated successfully'
+        });
+    } else if (result.isDismissed) {
+        Swal.fire({
+            title: "You cancelled or closed the dialog, This means no Action was taken to process update.",
+            icon: "success",
+            draggable: true
+        });
+    }
+    
+
+});
+
+async function handleUpdateAndPrint() {
     document.getElementById('output-section').style.display = 'block';
     const invoiceTable = document.getElementById('preview_invoice').cloneNode(true);
-    
+
     if (!invoiceTable) {
         $.jGrowl("Error", {
             header: 'Please generate the invoice first by clicking "Generate Invoice"'
         });
         return;
     }
-    
+
     const printWindow = window.open('', '_blank');
-    
-    // Create basic HTML structure for printing
+
     printWindow.document.write(`
         <!DOCTYPE html>
         <html>
@@ -582,18 +642,8 @@ document.getElementById('print-invoice').addEventListener('click', async () => {
             <script>
                 window.onload = function() {
                     window.print();
-                    
-                    // After printing, set up beforeunload handler
                     window.onafterprint = function() {
-                        // Ask user if they want to save
-                        const shouldSave = confirm('Would you like to save this invoice now?');
-                        
-                        if (shouldSave) {
-                            // Tell the parent window to save
-                            window.opener.postMessage('save_invoice', '*');
-                        }
-                        
-                        // Close after a short delay
+                        window.opener.postMessage('save_invoice', '*');
                         setTimeout(() => {
                             window.close();
                         }, 100);
@@ -604,199 +654,64 @@ document.getElementById('print-invoice').addEventListener('click', async () => {
         </html>
     `);
     printWindow.document.close();
-    
-    // Listen for save message from print window
+
     window.addEventListener('message', async (event) => {
         if (event.data === 'save_invoice') {
             try {
-                await save_invoice();
-                $.jGrowl("Success", {
-                    header: 'Invoice saved successfully'
+                await update_invoice();
+                Swal.fire({
+                    title: "Invoice updated & printed successfully.",
+                    icon: "success",
+                    draggable: true
                 });
             } catch (error) {
-                console.error('Error saving invoice:', error);
-                $.jGrowl("Error", {
-                    header: 'Failed to save invoice'
+                Swa.fire({
+                    title: "Failed",
+                    text: error,
+                    type: "error",
+                    color: '#716add',
+                    background: '#fff',
+                    backdrop: `rgba(0,0,123,0.4)`,
                 });
             }
         }
     });
-});
+}
 
-function getPaymentDetails() {
-    const apiUrl = base_url + 'api/payment_details';
-
-    fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.json();
-        })
-        .then(data => {
-            const select = document.getElementById('bank-select');
-            select.innerHTML = '';
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = '-- Select Bank --';
-            defaultOption.disabled = false;
-            defaultOption.selected = true;
-            select.appendChild(defaultOption);
-
-            if (Array.isArray(data)) {
-                data.forEach(bank => {
-                    const option = document.createElement('option');
-                    option.value = bank.account_number;
-                    option.textContent = `${bank.account_name} - ${bank.bank_name} (${bank.account_number})`;
-
-                    option.dataset.accountNumber = bank.account_number;
-                    option.dataset.accountHolderName = bank.account_name;
-                    option.dataset.bankName = bank.bank_name;
-					option.dataset.bankContainerId = bank.id;
-
-                    select.appendChild(option);
-                });
-            } else {
-                const option = document.createElement('option');
-                option.value = data.account_number;
-                option.textContent = `${data.account_name} - ${data.bank_name} (${data.account_number})`;
-                option.dataset.accountNumber = data.account_number;
-                option.dataset.accountHolderName = data.account_name;
-                option.dataset.bankName = data.bank_name;
-
-                select.appendChild(option);
-            }
-        })
-		.catch(error => {
-			$.jGrowl(error, {
-				header: 'Error fetching payment details:'
-			});
+async function update_invoice() { 
+	try {
+        const request = await xhrClient( base_url + `api/update_invoice/${invoiceId}`, 'PUT', {
+            'Content-Type': 'application/json',
+        }, payload);
+        Swal.fire('Success', request.message, 'success');
+    } catch (error) {
+        Swal.fire({
+            title: "Failed",
+            text: error,
+            type: "error",
+            color: '#716add',
+            background: '#fff',
+            backdrop: `rgba(0,0,123,0.4)`,
+            timer: 2500,
         });
+    }
 }
 
-function getUsersList() {
-	const apiUrl = base_url + 'api/users';
-	const table = $("#user-list-table").DataTable();
-
-	fetch(apiUrl)
-		.then(response => {
-			if (!response.ok) throw new Error('Network response was not ok');
-			return response.json();
-		})
-		.then(data => {
-			table.clear();
-			data.forEach(user => {
-				const formattedDate = formatDateTime(user.created_at);
-
-				table.row.add([
-					`<span style="color:#49474; font-weight:normal">${user.name}</span>`,
-					`<span style="color:#49474; font-weight:normal">${user.email}</span>`,
-					`<span style="color:#49474; font-weight:normal; font-size:12px">${user.role_name}</span>`,
-					`<span style="color:#49474; font-weight:normal; font-size:12px">${user.telephone}</span>`,
-					`<span style="color:#49474; font-weight:normal">${formattedDate}</span>`,
-					`<div class="btn btn-primary btn-xs select-customer_relation_officer" data-user-id="${user.id}">Select</div>`
-				]).draw();
-			});
-		})
-		.catch(error => {
-			$.jGrowl(error, {
-				header: 'Error fetching users list:'
-			});
-		});
+function renumberItemsInSection(tbody) {
+	const rows = tbody.querySelectorAll('tr');
+	rows.forEach((row, index) => {
+		row.cells[0].textContent = index + 1;
+	});
 }
 
-function getInvoiceNumber() {
-	const apiUrl = base_url + 'api/invoice_number';
-	fetch(apiUrl)
-		.then(response => {
-			if (!response.ok) throw new Error('Network response was not ok');
-			return response.json();
-		})
-		.then(data => {
-			$(".customer_invoice_no").val(data);
-		})
-		.catch(error => {
-			$.jGrowl(error, {
-				header: 'Error fetching users list:'
-			});
-		});
+function renumberSections() {
+	const sections = document.querySelectorAll('.invoice-section');
+	sections.forEach((section, index) => {
+		section.dataset.sectionId = index + 1;
+		section.querySelector('h3').textContent = `Section ${String.fromCharCode(65 + index)}`;
+	});
+	sectionCount = sections.length + 1;
 }
-
-function getBookList() {
-	const apiUrl = base_url + 'api/books';
-	const table = $("#product-list-table").DataTable();
-	let item_number = 1;
-	fetch(apiUrl)
-		.then(response => {
-			if (!response.ok) throw new Error('Network response was not ok');
-			return response.json();
-		})
-		.then(data => {
-			table.clear();
-			data.forEach(book => {
-				table.row.add([
-					`<span style="color:#49474; font-weight:normal">${item_number}</span>`,
-					`<span style="color:#49474; font-weight:normal; font-size:12px">${book.title}</span>`,
-                    `<span style="color:#49474; font-weight:normal; font-size:12px">${book.binding}</span>`,
-					`<span style="color:#49474; font-weight:normal" data-product-price=${book.sale_price}>${formatCurrency(book.sale_price)}</span>`,
-					`<div class="btn btn-primary btn-xs select-product" data-product-id="${book.id}">Select</div>`
-				]).draw();
-				item_number++;
-			});
-		})
-		.catch(error => {
-			console.error('Error fetching users list:', error);
-		});
-}
-
-function load_app_settings() {
-	const apiUrl = base_url + 'api/load_app_settings';
-	fetch(apiUrl)
-		.then(response => {
-			if (!response.ok) throw new Error('Network response was not ok');
-			return response.json();
-		})
-		.then(data => { 
-			company_detail.company_name = data.company_name;
-			company_detail.company_tagline= data.company_tagline;
-			company_detail.company_logo= data.company_logo;
-			company_detail.company_icon_logo= data.company_icon_logo;
-			company_detail.company_rc= data.company_rc;
-			company_detail.company_email= data.company_email;
-			company_detail.company_address= data.company_address;
-			company_detail.company_telephone= data.company_telephone;
-			company_detail.company_website= data.company_website;
-			company_detail.company_country= data.company_country;
-
-		}).catch(error => {
-			console.error('Error fetching users list:', error);
-		});
-}
-
-getBookList();
-getInvoiceNumber();
-getUsersList();
-addSection();
-getPaymentDetails();
-load_app_settings();
-
-$(document).on('click', ".close-payment-details", function (e) {
-	e.preventDefault;
-	$('#select-add-payment-details').modal('hide');
-	bank_name = "", account_name = "", account_number = "";
-	$("#bank-select-group").removeClass("has-error");
-	$('#select-add-payment-details').modal('hide');
-	$('.help-block-msg').show().html('');
-	return false;
-});
-
-const select_payment_details= document.getElementById("bank-select");
-
-select_payment_details.addEventListener('change', (e) => {
-	const selectedOption = e.target.options[e.target.selectedIndex];
-	account_number = selectedOption.getAttribute('data-account-number');
-	bank_name = selectedOption.getAttribute('data-bank-name');
-	account_name = selectedOption.getAttribute('data-account-holder-name');
-})
 
 $(document).on('click', ".button-payment-details", function (e) {
 	e.preventDefault();
@@ -820,61 +735,70 @@ $(document).on('click', ".button-payment-details", function (e) {
 	return false;
 });
 
-$(document).on('click', ".select-customer_relation_officer", function (e) {
-	e.preventDefault();
-	const row = $(this).closest('tr');
-	const table = $('#user-list-table').DataTable();
-	const rowData = table.row(row).data();
-	customer_name = $(rowData[0]).text();  
-	customer_telephone = $(rowData[3]).text(); 
-	const userId = $(this).data('user-id');
-	customer_relation_id = userId;
-	$(".customer_name").val(customer_name);
-	$(".customer_telephone").val(customer_telephone);
-	$("#selected_user_id").val(userId);
+$(document).on('click', ".close-payment-details", function (e) {
+	e.preventDefault;
+	$('#select-add-payment-details').modal('hide');
+	$("#bank-select-group").removeClass("has-error");
+	$('#select-add-payment-details').modal('hide');
+	$('.help-block-msg').show().html('');
+	return false;
+});
 
-	$('#select-customer-users').modal('hide');
+$(document).on('click', ".select-customer_relation_officer", function (e) {
+    e.preventDefault();
+    const row = $(this).closest('tr');
+    const table = $('#user-list-table').DataTable();
+    const rowData = table.row(row).data();
+    customer_name = $(rowData[0]).text();  
+    customer_telephone = $(rowData[3]).text(); 
+    const userId = $(this).data('user-id');
+    customer_relation_id = userId;
+    $(".customer_name").val(customer_name);
+    $(".customer_telephone").val(customer_telephone);
+    $("#selected_user_id").val(userId);
+
+    $('#select-customer-users').modal('hide');
 });
 
 $(document).on('click', ".select_product", function (e) {
-	e.preventDefault();
-	currentRow = $(this).closest('.item-row');
-	$('#select-stock-product').modal('show');
+    e.preventDefault();
+    currentRow = $(this).closest('.item-row');
+    $('#select-stock-product').modal('show');
 });
-	
+
 $(document).on('click', ".select-product", function (e) {
-	e.preventDefault();
-	const row = $(this).closest('tr');
-	const table = $('#product-list-table').DataTable();
-	const rowData = table.row(row).data();
-	const product_id = $(this).data('product-id');
-	const product_title = $(rowData[1]).text();
-	const productPriceSpan = $(rowData[3]);
-	const product_price = productPriceSpan.attr('data-product-price');
-	description = product_title;
-	unitPrice = product_price;
-	currentRow.find('.product_description').val(description);
-	currentRow.find('.invoice_product_price').val(unitPrice);
-	currentRow.find('.product_item_id').val(product_id);
-	const product_row = currentRow[0];
-	const quantityInput = product_row.querySelector('.quantity');
-	const unitPriceInput = product_row.querySelector('.unit-price');
-	const totalInput = product_row.querySelector('.item-total');
-	const calculateItemTotal = () => {
-	  const quantity = parseFloat(quantityInput.value) || 0.00;
-	  unitPrice = parseFloat(product_row.querySelector('.unit-price').value) || 0.00;
-	  const total = quantity * unitPrice;
-	  totalInput.value = formatCurrency(total, true);
-	};
-	quantityInput.addEventListener('input', calculateItemTotal);
-	unitPriceInput.addEventListener('input', calculateItemTotal);
-	calculateItemTotal(); 
-	$('#select-stock-product').modal('hide');
+    e.preventDefault();
+    const row = $(this).closest('tr');
+    const table = $('#product-list-table').DataTable();
+    const rowData = table.row(row).data();
+    const product_id = $(this).data('product-id');
+    const product_title = $(rowData[1]).text();
+    const productPriceSpan = $(rowData[3]);
+    const product_price = productPriceSpan.attr('data-product-price');
+    description = product_title;
+    unitPrice = product_price;
+    currentRow.find('.product_description').val(description);
+    currentRow.find('.invoice_product_price').val(unitPrice);
+    currentRow.find('.product_item_id').val(product_id);
+    const product_row = currentRow[0];
+    const quantityInput = product_row.querySelector('.quantity');
+    const unitPriceInput = product_row.querySelector('.unit-price');
+    const totalInput = product_row.querySelector('.item-total');
+    const calculateItemTotal = () => {
+      const quantity = parseFloat(quantityInput.value) || 0.00;
+      unitPrice = parseFloat(product_row.querySelector('.unit-price').value) || 0.00;
+      const total = quantity * unitPrice;
+      totalInput.value = formatCurrency(total, true);
+    };
+    quantityInput.addEventListener('input', calculateItemTotal);
+    unitPriceInput.addEventListener('input', calculateItemTotal);
+    calculateItemTotal(); 
+    $('#select-stock-product').modal('hide');
 });
 
 $(document).on('click', ".manually-added-empty-row-button", function (e) {
 	e.preventDefault();
-  
+
 	const invoiceTable = document.querySelector('.main_product_invoice_table tbody');
 	if (!invoiceTable) return;
 
@@ -896,19 +820,3 @@ $(document).on('click', ".manually-added-empty-row-button", function (e) {
 $(document).on('click', '.remove-empty-row', function () {
 	$(this).closest('tr').remove();
 });
-
-function calculateTotal() {
-let total = 0;
-$('.item-total').each(function() {
-	total += parseFloat($(this).val().replace(/[^0-9.-]+/g, '')) || 0;
-});
-$('#total').val(formatCurrency(total, true));
-}
-
-const calculateItemTotal = () => {
-	const quantity = parseFloat(quantityInput.value) || 0;
-	unitPrice = parseFloat(product_row.querySelector('.unit-price').value) || 0.00;
-	const total = quantity * unitPrice;
-	totalInput.value = formatCurrency(total, true);
-	calculateTotal(); 
-}; 

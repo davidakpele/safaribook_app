@@ -11,15 +11,11 @@ const xhrClient = (api_url, method, headers = {}, body = null) => {
         // Handle response
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    try {
-                        const response = JSON.parse(xhr.responseText);
-                        resolve(response);
-                    } catch (error) {
-                        reject(`Failed to parse response: ${error.message}`);
-                    }
-                } else {
-                    reject(`HTTP error! status: ${xhr.status} (${xhr.statusText})`);
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    resolve(response);
+                } catch (error) {
+                    reject(`Failed to parse response: ${error.message}`);
                 }
             }
         };

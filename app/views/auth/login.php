@@ -12,17 +12,17 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="SAFARI BOOKS LIMITED. 1 Shell Close, Ile Ori Detu, Onireke GRA, Ibadan," /> 
-    <link rel="icon" type="image/png" sizes="16x16" href="<?=ASSETS?>icons/logo.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="<?=ASSETS?>icons/logo.png" />
-    <link rel="apple-touch-icon" href="<?=ASSETS?>icons/logo.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="<?=ASSETS?>icons/logo.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="<?=ASSETS?>icons/logo.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="<?=ASSETS?>icons/logo.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="<?=ASSETS?>icons/logo.png" media="(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="<?=ASSETS?>icons/logo.png" media="(min-device-width: 834px) and (max-device-width: 834px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="<?=ASSETS?>icons/logo.png" media="(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="icon" type="image/png" sizes="16x16" href="<?=ASSETS?>icons/cropped-safari_books_ltd-32x32.webp" />
+    <link rel="icon" type="image/png" sizes="32x32" href="<?=ASSETS?>icons/cropped-safari_books_ltd-32x32.webp" />
+    <link rel="apple-touch-icon" href="<?=ASSETS?>icons/cropped-safari_books_ltd-32x32.webp" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="<?=ASSETS?>icons/cropped-safari_books_ltd-32x32.webp" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="<?=ASSETS?>icons/cropped-safari_books_ltd-32x32.webp" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="<?=ASSETS?>icons/cropped-safari_books_ltd-32x32.webp" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="<?=ASSETS?>icons/cropped-safari_books_ltd-32x32.webp" media="(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="<?=ASSETS?>icons/cropped-safari_books_ltd-32x32.webp" media="(min-device-width: 834px) and (max-device-width: 834px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="<?=ASSETS?>icons/cropped-safari_books_ltd-32x32.webp" media="(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)" />
     <title><?=$data['page_title'] . " | " . WEBSITE_TITLE;?></title>
-    <link rel="shortcut icon" href="<?=ASSETS?>icons/logo.png" />
+    <link rel="shortcut icon" href="<?=ASSETS?>icons/cropped-safari_books_ltd-32x32.webp" />
     <link rel="stylesheet" href="<?=ASSETS?>fontawesome/css/all.css"/>
     <link rel="stylesheet" href="<?=ASSETS?>css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?=ASSETS?>css/fpo787jkfd.css" />
@@ -41,9 +41,8 @@
                 <div class="blue"></div>
             </div>
         </div>
-        <center class="mt-5" style="margin-top:40px">
-            <img src="<?=ASSETS?>icons/logo.png" class="img-responsive" style="max-width:120px">
-            <h1 style="font-size: 30px; color: white;">SAFARI BOOKS LIMITED</h1>
+        <center class="mt-5" style="margin-top:80px">
+            <img src="<?=ASSETS?>icons/Safari-books-logo.webp" class="img-responsive" style="width:45vh">
             <h1 style="font-size: 20px; color: white;">Head Business Development</h1>
         </center>
         <div class="items">

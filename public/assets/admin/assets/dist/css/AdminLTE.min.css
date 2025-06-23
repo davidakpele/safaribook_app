@@ -60,7 +60,7 @@ body {
     margin-left: 0
 }
 
-@media (max-width:767px) {
+@media (max-width:1050px) {
 
     .content-wrapper,
     .main-footer {
@@ -76,7 +76,7 @@ body {
     }
 }
 
-@media (max-width:767px) {
+@media (max-width:1050px) {
 
     .sidebar-open .content-wrapper,
     .sidebar-open .main-footer {
@@ -117,7 +117,7 @@ body {
     padding-top: 50px
 }
 
-@media (max-width:767px) {
+@media (max-width:1050px) {
 
     .fixed .content-wrapper,
     .fixed .right-side {
@@ -250,7 +250,7 @@ a:focus {
     }
 }
 
-@media (max-width:767px) {
+@media (max-width:1050px) {
     .main-header .navbar-right {
         float: none
     }
@@ -325,6 +325,11 @@ a:focus {
 
 .main-header .logo .logo-lg {
     display: block
+}
+.main-header .logo:hover,
+.main-header .logo:active,
+.main-header .logo:focus {
+    text-decoration: none !important;
 }
 
 .main-header .logo .logo-mini {
@@ -421,7 +426,7 @@ a:focus {
     }
 }
 
-@media (max-width:767px) {
+@media (max-width:1050px) {
     .main-header {
         position: relative
     }
@@ -468,13 +473,13 @@ a:focus {
     transition: transform .3s ease-in-out, width .3s ease-in-out
 }
 
-@media (max-width:767px) {
+@media (max-width:1050px) {
     .main-sidebar {
         padding-top: 100px
     }
 }
 
-@media (max-width:767px) {
+@media (max-width:1050px) {
     .main-sidebar {
         -webkit-transform: translate(-230px, 0);
         -ms-transform: translate(-230px, 0);
@@ -483,7 +488,7 @@ a:focus {
     }
 }
 
-@media (min-width:768px) {
+@media (min-width:1050px) {
     .sidebar-collapse .main-sidebar {
         -webkit-transform: translate(-230px, 0);
         -ms-transform: translate(-230px, 0);
@@ -492,7 +497,7 @@ a:focus {
     }
 }
 
-@media (max-width:767px) {
+@media (max-width:1050px) {
     .sidebar-open .main-sidebar {
         -webkit-transform: translate(0, 0);
         -ms-transform: translate(0, 0);
@@ -641,7 +646,7 @@ a:focus {
         width: 50px !important;
         z-index: 850
     }
-
+  
     .sidebar-mini.sidebar-collapse .sidebar-menu>li {
         position: relative
     }
@@ -680,8 +685,8 @@ a:focus {
 
     .sidebar-mini.sidebar-collapse .main-header .logo>.logo-mini {
         display: block;
-        margin-left: -15px;
-        margin-right: -15px;
+        margin-left: -9px;
+        margin-right: -33px;
         font-size: 18px
     }
 
@@ -789,7 +794,7 @@ a:focus {
     z-index: 1010
 }
 
-@media (max-width:767px) {
+@media (max-width:1050px) {
     .control-sidebar {
         padding-top: 100px
     }
@@ -1329,7 +1334,7 @@ a:focus {
     margin-top: -2px
 }
 
-@media (max-width:767px) {
+@media (max-width:1050px) {
     .navbar-nav>.user-menu .user-image {
         float: none;
         margin-right: 0;
@@ -1746,9 +1751,13 @@ a:focus {
     font-size: 95px
 }
 
-@media (max-width:767px) {
+@media (max-width:1050px) {
     .small-box {
         text-align: center
+    }
+    
+    .active_user_box{
+        margin-bottom: 77px !important;
     }
 
     .small-box .icon {

@@ -19,34 +19,10 @@ final class DashboardController extends Controller
 
     public function index(){
         if ($this->session->authCheck()) {
+            $records =$this->data_repository->get_record();
             $data = [
                 'page_title'=> 'Dashboard',
-                'settings'=>[
-                    'company_name'=> 'SAFARI BOOKS LIMITED'
-                ],
-            ];
-            $this->view("dashboard/index", $data);
-        }else{
-            redirect("auth/logout");
-        }
-    }
-
-    public function ceo(){
-        $this->view("index"); 
-    } 
-
-    public function manager(){
-        $this->view("index"); 
-    }
-
-    public function accountant(){
-        $this->view("index"); 
-    } 
-    
-    public function business_dev(){
-        if ($this->session->authCheck()) {
-            $data = [
-                'page_title'=> 'Dashboard',
+                'records'=> $records,
                 'settings'=>[
                     'company_name'=> 'SAFARI BOOKS LIMITED'
                 ],
@@ -74,17 +50,16 @@ final class DashboardController extends Controller
     public function create_invoice(){
         if ($this->session->authCheck()) {
             $data = [
-                'page_title'=> 'Manage Quotation',
+                'page_title'=> 'Create Client Invoice',
                 'settings'=>[
                     'company_name'=> 'SAFARI BOOKS LIMITED'
                 ],
             ];
-            $this->view("dashboard/quotation", $data);
+            $this->view("dashboard/invoice", $data);
         }else{
             redirect("auth/logout");
         }
-    }  
-
+    }
 
     public function stock(){
         if ($this->session->authCheck()) {
@@ -136,5 +111,81 @@ final class DashboardController extends Controller
         }
     }
 
+    public function manage_invoice(){
+        if ($this->session->authCheck()) {
+            $data = [
+                'page_title'=> 'Manage Invoice',
+                'settings'=>[
+                    'company_name'=> 'SAFARI BOOKS LIMITED'
+                ],
+            ];
+            $this->view("dashboard/manage_invoice", $data);
+        }else{
+            redirect("auth/logout");
+        }
+    }
+
+    public function edit_invoice(){
+        if ($this->session->authCheck()) {
+            $data = [
+                'page_title'=> 'Edit Invoice',
+                'settings'=>[
+                    'company_name'=> 'SAFARI BOOKS LIMITED'
+                ],
+            ];
+            $this->view("dashboard/edit_invoice", $data);
+        }else{
+            redirect("auth/logout");
+        }
+    }
+
+    public function edituser($url){
+        if ($this->session->authCheck()) {
+            if (RequestHandler::isRequestMethod('GET')) {
+                $urlParts = explode('/', $url); 
+                $controller = !empty($urlParts[0])? $urlParts[0] : '';
+                $controllerName = $controller;
+                $id= trim(filter_var((int)$controllerName, FILTER_SANITIZE_NUMBER_INT));
+                if (!is_numeric($id)) {
+                    $this->entryHeaderHandle->sendErrorResponse("Id must be interger", 401);
+                }
+                $user  = $this->data_repository->getUserById($id);
+                if ($user ==null || !$user) {
+                    $this->entryHeaderHandle->sendErrorResponse("User not found", 404);
+                }
+                $roles  = $this->data_repository->getUserRoles();
+                $data = [
+                    'page_title'=> 'Edit User',
+                    'editdata'=>$user,
+                    'rolelist'=>$roles,
+                    'id'=>$controllerName,
+                    'settings'=>[
+                        'company_name'=> 'SAFARI BOOKS LIMITED'
+                    ],
+                ];
+                $this->view("dashboard/user/edit", $data);
+            }else{
+                $this->entryHeaderHandle->sendErrorResponse("Method Not Allowed", 405);
+            }
+        }else{
+            redirect("auth/logout");
+        }
+    }
+
+    public function settings(){
+        if ($this->session->authCheck()) {
+            $records =$this->data_repository->get_record();
+            $data = [
+                'page_title'=> 'Dashboard',
+                'records'=> $records,
+                'settings'=>[
+                    'company_name'=> 'SAFARI BOOKS LIMITED'
+                ],
+            ];
+            $this->view("dashboard/settings", $data);
+        }else{
+            redirect("auth/logout");
+        }
+    }
     
 }
