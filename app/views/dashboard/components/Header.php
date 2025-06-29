@@ -40,11 +40,15 @@
     <link rel="stylesheet" href="<?=ASSETS?>css/bootstrap.datetimepicker.css"/>
 	<link rel="stylesheet" href="<?=ASSETS?>admin/assets/dist/css/mystyle.css"/>
     <link rel="stylesheet" href="<?=ASSETS?>css/jquery.jgrowl.css"/>
-    <link href="<?=ASSETS?>admin/assets/library/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?=ASSETS?>admin/assets/library/dataTables.bootstrap5.min.css" />
     <link rel="stylesheet" href="<?=ASSETS?>admin/assets/plugins/summernote/dist/summernote.css">
-    <link href="<?=ASSETS?>admin/assets/library/daterangepicker.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?=ASSETS?>admin/assets/library/daterangepicker.css" />
     <link rel="stylesheet" href="<?=ASSETS?>css/bootstrap.min.css"/>
     <link rel="stylesheet" href="<?=ASSETS?>css/dataTable.css"/>
+    <link rel="stylesheet" href="<?=ASSETS?>admin/assets/plugins/multiple-inputs/css/tagify.css" />
+    <script src="<?=ASSETS?>admin/assets/plugins/multiple-inputs/js/tagify.js"></script>
+    <script src="<?=ASSETS?>admin/assets/plugins/canvas/html2canvas.min.js"></script>
+    <script src="<?=ASSETS?>admin/assets/plugins/canvas/jspdf.umd.min.js"></script>
     <script src="<?=ASSETS?>admin/assets/library/jquery.min.js"></script>
     <script src="<?=ASSETS?>admin/assets/library/bootstrap-5/bootstrap.bundle.min.js"></script>
     <script src="<?=ASSETS?>admin/assets/library/moment.min.js"></script>

@@ -1,8 +1,12 @@
 <?php
 
 use Session\AuthSession;
+use App\Services\PdfDocumentSender;
+use App\Services\DocxDocumentSender;
 use Exception\RequestException;
 use Request\RequestHandler;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 final class APIController extends Controller
 {
@@ -363,7 +367,6 @@ final class APIController extends Controller
                 $requestHandler = new RequestHandler($this->entryHeaderHandle);
                 if (RequestHandler::isRequestMethod('GET')) {
                     $response=  $this->repository->get_app_settings();
-                    dnd($response);
                     header("Content-Type: application/json");
                     echo json_encode($response, JSON_PRETTY_PRINT);
                     http_response_code(200);
@@ -382,7 +385,6 @@ final class APIController extends Controller
         if ($this->session->authCheck()) {
             if ($this->entryHeaderHandle->CorsHeader()) {
                 $requestHandler = new RequestHandler($this->entryHeaderHandle);
-
                 if (RequestHandler::isRequestMethod('PUT')) {
                     $urlParts = explode('/', $url); 
                     $controller = !empty($urlParts[0])? $urlParts[0] : '';
@@ -437,6 +439,21 @@ final class APIController extends Controller
         } else {
             $this->entryHeaderHandle->sendErrorResponse("Access denied", 401);
         }
+    }
+    
+    public function send_document() {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $settings =  $this->repository->get_app_settings();
+
+        if (isset($data['pdf'])) {
+            $sender = new PdfDocumentSender($this->entryHeaderHandle, $this->session);
+        } elseif (isset($data['docx'])) {
+            $sender = new DocxDocumentSender($this->entryHeaderHandle, $this->session);
+        } else {
+            return print json_encode(['success' => false, 'error' => 'Unsupported document type']);
+        }
+        
+        return $sender->sendDocument();
     }
     
 }

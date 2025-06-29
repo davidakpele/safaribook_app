@@ -1888,8 +1888,8 @@ input[type="checkbox"]:checked:before {
     margin-top: 1px;
 }
 
-#idm {
-    overflow: scroll;
+#idm, #product-list-table, #user-list-table {
+    overflow: scroll !important;
 }
 .company-table-content-display-lg{
     font-weight: normal;
@@ -2051,4 +2051,209 @@ input[type="checkbox"]:checked:before {
 
 .description-block>.description-text {
     text-transform: uppercase;
+}
+
+.main-edit-container{
+    display:none
+}
+.stock-status{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    display: inline-block;
+    padding: .25em .4em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.in-stock{
+    color: #fff;
+    background-color: #00a65a;
+}
+.out-of-stock{
+    color: #fff;
+    background-color: #777;
+}
+.publishing-stage{
+    color: #fff;
+    background-color: #a40f0f;
+}
+
+
+/* Form Container Styles */
+#email_to,
+.tagify {
+    width: 100%;
+    display: block;
+}
+.share_invoice_label{
+    width: 40px;
+    min-width: 40px;
+    font-size: 13px;
+    color: #444;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.email-compose-form .modal-content {
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Header */
+.email-compose-form .modal-header {
+    background-color: #f1f5fb;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 16px;
+}
+
+.email-compose-form .modal-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: #1a1a1a;
+}
+
+/* Close Button */
+.email-compose-form .close {
+    font-size: 2.4rem;
+    color: #555;
+}
+
+
+.email-compose-form .form-control:focus {
+    border-color: #1a73e8;
+    box-shadow: none;
+}
+
+/* Textarea */
+.email-compose-form textarea {
+    resize: vertical;
+    font-size: 14px;
+}
+
+/* Footer */
+.email-compose-form .modal-footer {
+    border-top: 1px solid #e0e0e0;
+    padding: 10px 16px;
+}
+
+.email-compose-form .btn-primary {
+    background-color: #1a73e8;
+    border-color: #1a73e8;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 6px 18px;
+    border-radius: 20px;
+}
+
+.email-compose-form .btn-primary:hover {
+    background-color: #1669c1;
+    border-color: #1669c1; 
+}
+
+.email-row {
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.email-row label {
+    width: 40px;
+    min-width: 40px;
+    font-size: 12px;
+    color: #444;
+}
+
+.email-row .form-control {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 14px;
+    flex: 1;
+    padding: 6px 8px;
+    margin-left: 8px;
+}
+
+.email-row .form-control:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.email-row.with-actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.email-row.with-actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.email-row.with-actions label {
+    width: 40px;
+    margin-top: 6px;
+    font-weight: 500;
+}
+
+.email-row.with-actions .form-control {
+    flex: 1;
+    min-height: 38px;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.email-row.with-actions .tagify {
+    width: 100%;
+    max-height: 60px;
+    overflow-y: auto;
+    border-radius: 4px;
+
+}
+
+.email-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.email-actions button {
+    padding: 4px 10px;
+    font-size: 12px;
+    border: 1px solid #007bff;
+    background-color: white;
+    color: #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.email-actions button:hover {
+    background-color: #007bff;
+    color: white;
+}
+.email-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.email-actions button {
+    background: none;
+    border: none;
+    color: #1a73e8;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.email-actions button:hover {
+    text-decoration: underline;
+}
+.ccContainer, .bccContainer{
+    display: none;
 }

@@ -24,8 +24,17 @@
 					<li class="active">Stock  Data</li>
 				</ol>
 			</section>
+            <div id="page-loader" style="display: flex; align-items: center; justify-content: center; height: 100vh; flex-direction: column; gap: 1rem;">
+                <img src="<?=ASSETS?>icons/loader.gif" alt="Loading..." style="width: 30px; height: 30px;" />
+                
+                <div class="spinner-border" role="status" style="width: 2rem; height: 1rem;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+
+                <p style="text-align: center; margin: 0;">Loading stock...</p>
+            </div>
 			<!-- Main content -->
-			<section class="content container-fluid">
+			<section class="content container-fluid main-edit-container">
                 <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Master Stock  Data</h3>
@@ -34,6 +43,7 @@
                             </button>
                         </div>
                     </div>
+                    
                     <div class="box-body">
                         <div class="mt-2 mb-4">
                             <a href="<?=ROOT?>dashboard/create_product?action=create_new"><button type="button" class="btn btn-sm bg-blue btn-flat"><i class="fa fa-plus"></i> Add Book</button></a>
@@ -52,8 +62,9 @@
                                         <th>Item No</th>
                                         <th><input type="checkbox" id="chk_all" value=""/></th>
                                         <th>Title</th>
-                                        <th >Binding</th>
+                                        <th>Binding</th>
                                         <th>Price</th>
+                                        <th>Status</th>
                                         <th>ACTION</th>
                                     </tr>
                                 </thead>

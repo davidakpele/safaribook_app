@@ -27,35 +27,112 @@ SET time_zone = "+00:00";
 -- Table structure for table `books`
 --
 
-CREATE TABLE `books` (
-  `id` int(20) NOT NULL,
+DROP TABLE IF EXISTS `books`;
+CREATE TABLE IF NOT EXISTS `books` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,
+  `author` text NOT NULL,
   `binding` enum('HB','PB','','') NOT NULL,
-  `sale_price` decimal(10,2) NOT NULL DEFAULT 0.00
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `sale_price` decimal(10,2) NOT NULL DEFAULT 0.00,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Truncate table before insert `books`
+--
+
+TRUNCATE TABLE `books`;
 --
 -- Dumping data for table `books`
 --
 
-INSERT INTO `books` (`id`, `title`, `binding`, `sale_price`) VALUES
-(1, 'Brutally Frank', 'HB', 25000.00),
-(2, 'Nigerwives', 'HB', 10000.00),
-(3, 'Nigerwives', 'PB', 15000.00),
-(4, 'Working With Buhari', 'HB', 20000.00),
-(5, 'The History Of The Nigeria Railway', '', 35000.00),
-(6, 'Politics As Dashed Hopes In Nigeria', 'PB', 10000.00),
-(7, 'A Brief History Of Time', '', 4500.00),
-(8, 'International Relations', '', 7500.00),
-(9, '60 Year Long March Towards Democracy', '', 0.00),
-(10, 'Morning By Morning', 'HB', 10000.00),
-(11, 'Morning By Morning', 'PB', 7500.00),
-(12, 'Know Your Country Katsina', '', 0.00),
-(13, 'Strategic Turnaround', 'HB', 25000.00),
-(14, 'Strategic Turnaround', 'PB', 20000.00),
-(15, 'What They Don\'t Teach You Broadcasting', '', 4500.00),
-(16, 'Just Thinking Vol. 1', '', 4000.00),
-(17, 'Just Thinking Vol. 2', '', 4000.00);
+INSERT INTO `books` (`id`, `title`, `author`, `binding`, `sale_price`) VALUES
+(1, 'Brutally Frank', 'Edwin Clerk', 'HB', 25000.00),
+(2, 'Nigerwives', '', 'HB', 10000.00),
+(3, 'Nigerwives', '', 'PB', 15000.00),
+(4, 'Working With Buhari', '', 'HB', 20000.00),
+(5, 'The History Of The Nigeria Railway', '', '', 35000.00),
+(6, 'Politics As Dashed Hopes In Nigeria', '', 'PB', 10000.00),
+(7, 'A Brief History Of Time', '', '', 4500.00),
+(8, 'International Relations', '', '', 7500.00),
+(9, '60 Year Long March Towards Democracy', '', '', 0.00),
+(10, 'Morning By Morning', '', 'HB', 10000.00),
+(11, 'Morning By Morning', '', 'PB', 7500.00),
+(12, 'Know Your Country Katsina', '', '', 0.00),
+(13, 'Strategic Turnaround', '', 'HB', 25000.00),
+(14, 'Strategic Turnaround', '', 'PB', 20000.00),
+(15, 'What They Don\'t Teach You Broadcasting', '', '', 4500.00),
+(16, 'Just Thinking Vol. 1', '', '', 4000.00),
+(17, 'Just Thinking Vol. 2', '', '', 4000.00),
+(19, 'Universal Tetiary Education in Nigeria', '', '', 0.00),
+(20, 'Still Standing', '', '', 0.00),
+(21, 'Universal Organic Chemistry', '', '', 5000.00),
+(22, 'The Entrepreneur', '', 'HB', 15000.00),
+(23, 'The Entrepreneur', '', 'PB', 10000.00),
+(24, 'Standing For Truth With Courage', '', 'HB', 0.00),
+(25, 'Standing For Truth With Courage', '', 'PB', 0.00),
+(26, 'Battlelines', '', 'HB', 0.00),
+(27, 'The Making of a Nigeria Engineer', '', 'PB', 0.00),
+(28, 'Company Law & Practice in Nigeria', '', '', 10000.00),
+(29, 'The Church of the Brethren', '', 'HB', 0.00),
+(30, 'The Church of The Brethren', '', 'PB', 0.00),
+(31, 'Travel Agency Operations in Nigeria', '', 'HB', 0.00),
+(32, 'Travel Agency Operations in Nigeria', '', 'PB', 0.00),
+(33, 'The Niger Delta Paradox', '', '', 5000.00),
+(34, 'Prime Witness', '', '', 5000.00),
+(35, 'To Live With Happiness', '', '', 0.00),
+(36, 'Election Management in Nigeria', '', '', 0.00),
+(37, 'Africa Philosophy of Education', '', 'HB', 0.00),
+(38, 'Africa Philosophy of Education', '', 'PB', 0.00),
+(39, 'The Holy of Book of Ifa Adimula', '', '', 0.00),
+(40, 'Islam is Moderation', '', '', 0.00),
+(41, 'All Will Be Well', '', 'HB', 15000.00),
+(42, 'All Will Be Well', '', 'PB', 10000.00),
+(43, 'Hallmark of Labour Vol. 11', '', 'HB', 0.00),
+(44, 'Solar Power Installation', '', '', 4000.00),
+(45, 'Stress Management', '', '', 0.00),
+(46, 'Art of Courage', '', '', 0.00),
+(47, 'Obasanjo - Nigeria\'s Most Successful Ruler', '', '', 0.00),
+(48, 'Apga - The Trials Tribulation', '', 'HB', 0.00),
+(49, 'Apga - The Trials Tribulation', '', 'PB', 0.00),
+(50, 'The Builder Never Stops', '', 'PB', 0.00),
+(51, 'Buhari: The Making of a President', '', 'HB', 0.00),
+(52, 'Buhari: The Making of a President', '', 'PB', 15000.00),
+(53, 'Essays on Contemporary Issues in Nigeria Banks', '', 'HB', 20000.00),
+(54, 'Essays on Contemporary Issues in Nigeria Banks', '', 'PB', 0.00),
+(55, 'The Accomplished Public Servant', '', 'PB', 0.00),
+(56, 'The Great Igbinedion', '', 'HB', 0.00),
+(57, 'Dialectics of Rights', '', '', 0.00),
+(58, 'Onye Nkuzi Tech', '', '', 0.00),
+(59, 'In Search for Sustainable', '', 'HB', 0.00),
+(60, 'In Search for Sustainable', '', 'PB', 0.00),
+(61, 'Nigeria Tariff and Non Tariff Polices', '', 'PB', 0.00),
+(62, 'Know Your Country Oyo', '', 'PB', 0.00),
+(63, 'Party Coalition in Nigeria', '', '', 0.00),
+(64, 'Frontiers of Jihad', '', '', 5000.00),
+(65, 'I Remember', '', 'HB', 10000.00),
+(66, 'I Remember', '', 'PB', 5000.00),
+(67, 'The Other Side of Biafra', '', 'HB', 15000.00),
+(68, 'The Flame Tree', '', '', 5000.00),
+(69, 'The Accidental Public Servant', '', '', 10000.00),
+(70, 'Africa\'s Security Challenges in the 21st Century', '', '', 10000.00),
+(71, 'I Am Because We Are', '', 'HB', 10000.00),
+(72, 'Medicine My Passport', '', '', 10000.00),
+(73, 'Lagos State Visual Portrait', '', '', 0.00),
+(74, 'The Power of One Man', '', 'HB', 0.00),
+(75, 'The Power of One Man', '', 'PB', 0.00),
+(76, 'Uncommon Grace', '', 'PB', 0.00),
+(77, 'The Riches of His Grace', '', 'PB', 0.00),
+(78, 'Persona Non-Grata', '', 'HB', 20000.00),
+(79, 'Persona Non-Grata', '', 'PB', 15000.00),
+(80, 'Hallmark of Labour Vol. 12', '', 'HB', 0.00),
+(81, 'Ogbeni: The Osun Renaissance Years', '', 'HB', 0.00),
+(82, 'Ogbeni: The Osun Renaissance Years', '', 'PB', 0.00),
+(83, 'Contending Issues in Nigeria Democracy and Development', '', 'HB', 0.00),
+(84, 'Contending Issues in Nigeria Democracy and Development', '', 'PB', 0.00),
+(85, 'Know Oyo State', '', '', 5000.00),
+(86, 'Cecilia', '', '', 35000.00);
+
 
 -- --------------------------------------------------------
 
@@ -73,18 +150,7 @@ CREATE TABLE `commercial_invoice_number` (
 --
 
 INSERT INTO `commercial_invoice_number` (`id`, `invoice_number`) VALUES
-(1, '000896'),
-(2, '000897'),
-(3, '000898'),
-(4, '000899'),
-(5, '000900'),
-(6, '000901'),
-(7, '000902'),
-(8, '000902'),
-(12, '000903'),
-(13, '000903'),
-(14, '000903'),
-(15, '000904');
+(1, '000896');
 
 -- --------------------------------------------------------
 
@@ -124,7 +190,7 @@ INSERT INTO `invoice` (`id`, `invoice_number`, `customer_id`, `invoice_date`, `s
 -- Table structure for table `invoice_items`
 --
 
-CREATE TABLE `invoice_items` (
+CREATE TABLE IF NOT EXISTS `invoice_items` (
   `id` int(11) NOT NULL,
   `section_id` int(11) DEFAULT NULL,
   `product_id` int(11) DEFAULT NULL,
@@ -137,32 +203,13 @@ CREATE TABLE `invoice_items` (
 -- Dumping data for table `invoice_items`
 --
 
-INSERT INTO `invoice_items` (`id`, `section_id`, `product_id`, `quantity`, `unit_price`, `total`) VALUES
-(95, 40, 1, 2, 25000.00, 50000.00),
-(96, 40, 2, 4, 10000.00, 40000.00),
-(97, 40, 5, 1, 35000.00, 35000.00),
-(98, 41, 4, 6, 20000.00, 120000.00),
-(99, 41, 13, 40, 25000.00, 1000000.00),
-(100, 41, 16, 6, 4000.00, 24000.00),
-(101, 41, 13, 23, 25000.00, 575000.00),
-(102, 42, 11, 1, 7500.00, 7500.00),
-(103, 42, 10, 15, 10000.00, 150000.00),
-(104, 43, 8, 7, 7500.00, 52500.00),
-(128, 54, 5, 1, 35000.00, 35000.00),
-(129, 54, 10, 1, 10000.00, 10000.00),
-(130, 55, 1, 1, 25000.00, 25000.00),
-(131, 55, 2, 12, 10000.00, 120000.00),
-(132, 56, 5, 19, 35000.00, 665000.00),
-(133, 56, 4, 5, 20000.00, 100000.00),
-(134, 56, 15, 3, 4500.00, 13500.00);
-
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `invoice_section`
 --
 
-CREATE TABLE `invoice_section` (
+CREATE TABLE IF NOT EXISTS `invoice_section` (
   `id` int(11) NOT NULL,
   `invoice_id` int(11) DEFAULT NULL,
   `label` varchar(10) DEFAULT NULL,
@@ -175,23 +222,13 @@ CREATE TABLE `invoice_section` (
 --
 -- Dumping data for table `invoice_section`
 --
-
-INSERT INTO `invoice_section` (`id`, `invoice_id`, `label`, `discount_percent`, `sub_total`, `discount_amount`, `total_after_discount`) VALUES
-(40, 11, 'labelA', 20.00, 125000.00, 25000.00, 100000.00),
-(41, 11, 'labelB', 10.00, 1719000.00, 171900.00, 1547100.00),
-(42, 11, 'labelC', 10.00, 157500.00, 15750.00, 141750.00),
-(43, 11, 'labelD', 10.00, 52500.00, 5250.00, 47250.00),
-(54, 14, 'labelA', 20.00, 45000.00, 9000.00, 36000.00),
-(55, 4, 'labelA', 20.00, 145000.00, 29000.00, 116000.00),
-(56, 4, 'labelB', 10.00, 778500.00, 77850.00, 700650.00);
-
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `payment_details`
 --
 
-CREATE TABLE `payment_details` (
+CREATE TABLE IF NOT EXISTS `payment_details` (
   `id` int(20) NOT NULL,
   `account_number` varchar(100) NOT NULL,
   `bank_name` varchar(250) NOT NULL,
@@ -212,7 +249,7 @@ INSERT INTO `payment_details` (`id`, `account_number`, `bank_name`, `account_nam
 -- Table structure for table `records`
 --
 
-CREATE TABLE `records` (
+CREATE TABLE IF NOT EXISTS `records` (
   `id` int(20) NOT NULL,
   `no_printed_invoices` bigint(20) NOT NULL,
   `no_printed_users` bigint(20) NOT NULL,
@@ -234,7 +271,7 @@ INSERT INTO `records` (`id`, `no_printed_invoices`, `no_printed_users`, `no_prin
 -- Table structure for table `roles`
 --
 
-CREATE TABLE `roles` (
+CREATE TABLE IF NOT EXISTS `roles` (
   `id` int(11) NOT NULL,
   `name` enum('CEO','MANAGER','ACCOUNTANT','HEAD - BUSINESS DEVELOPMENT','HUMAN RESOURCE - HR','EDITORIAN MANAGER - ED','MARKETING MANAGER','DRIVER') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -261,7 +298,7 @@ INSERT INTO `roles` (`id`, `name`, `created_at`, `updated_at`) VALUES
 -- Table structure for table `settings`
 --
 
-CREATE TABLE `settings` (
+CREATE TABLE IF NOT EXISTS `settings` (
   `id` int(20) NOT NULL,
   `company_name` text NOT NULL,
   `company_tagline` text NOT NULL,
@@ -289,7 +326,7 @@ INSERT INTO `settings` (`id`, `company_name`, `company_tagline`, `company_logo`,
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -311,12 +348,6 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `role_id`, `telephone`, 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `books`
---
-ALTER TABLE `books`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `commercial_invoice_number`
@@ -472,6 +503,28 @@ ALTER TABLE `invoice_section`
 ALTER TABLE `users`
   ADD CONSTRAINT `fk_role` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON UPDATE CASCADE;
 COMMIT;
+
+
+ALTER TABLE settings
+MODIFY COLUMN id INT NOT NULL PRIMARY KEY;
+
+DELIMITER $$
+
+CREATE TRIGGER allow_only_one_row
+BEFORE INSERT ON settings
+FOR EACH ROW
+BEGIN
+  DECLARE row_count INT;
+  SELECT COUNT(*) INTO row_count FROM settings;
+
+  IF row_count >= 1 THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Only one row allowed in the settings table';
+  END IF;
+END$$
+
+DELIMITER;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

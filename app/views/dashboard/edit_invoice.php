@@ -21,6 +21,17 @@
                     <li class="active">Invoice</li>
                 </ol>
             </section>
+            <div id="page-loader" style="display: flex; align-items: center; justify-content: center; height: 100vh; flex-direction: column; gap: 1rem;">
+                <img src="<?=ASSETS?>icons/loader.gif" alt="Loading..." style="width: 30px; height: 30px;" />
+                
+                <div class="spinner-border" role="status" style="width: 2rem; height: 1rem;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+
+                <p style="text-align: center; margin: 0;">Loading invoice...</p>
+            </div>
+
+
             <section class="content main-edit-container">
                 <h2>Edit <span class="invoice_type">Invoice</span> </h2>
                 <!-- <hr> -->
@@ -100,8 +111,26 @@
                                                 <small class="help-block-error-msg" style="color:#dd4b39;"></small>
                                             </div>
                                             <div class="form-group">
+                                                <label for="address" style="color:black">Address <small>(Optional)</small>:*</label>
+                                                <div id="address_lines_container">
+                                                    <input type="text" class="form-control copy-input required address-line" id="address-line" placeholder="Client Address / Location" >
+                                                </div>
+                                                
+                                                    <div class="row" id="address_row_container">
+                                                    <!-- dynamic input lines go here -->
+                                                    </div>
+                                                
+                                                <button type="button" class="btn btn-xs btn-success mt-1 add_new_address_line">Add Address Line</button>
+                                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="city" style="color:black">City/Town:*</label>
                                                 <input type="text" class="form-control copy-input required client_city" id="client_city" placeholder="Client City / Town" >
+                                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="telephone" style="color:black">Telephone:*</label>
+                                                <input type="tel" class="form-control copy-input required client_telephone" id="client_telephone" placeholder="+234" >
                                                 <small class="help-block-error-msg" style="color:#dd4b39;"></small>
                                             </div>
                                         </div>
@@ -130,6 +159,7 @@
                         <div class="action-buttons">
                             <button id="calculate" type="button" class="btn btn-flat btn-sm btn btn-default add-row"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span>&nbsp; Generate Invoice</button>
                             <button id="print-invoice" disabled type="button" class="btn btn-flat btn-sm btn btn-primary add-row"><span class="glyphicon glyphicon-print" aria-hidden="true"></span>&nbsp;Print Invoice</button>
+                            <button id="print-invoice" type="button" class="btn btn-flat btn-sm btn btn-primary add-delivery-cost"><i class="fa fa-usd" aria-hidden="true"></i></span>&nbsp;Add Cost of Delivery
                         </div>
                     </div>
                     

@@ -11,5 +11,9 @@ require_once "..".DIRECTORY_SEPARATOR."app".DIRECTORY_SEPARATOR."helpers".DIRECT
 require_once "..".DIRECTORY_SEPARATOR."app".DIRECTORY_SEPARATOR."sessions".DIRECTORY_SEPARATOR."AuthSession.php";
 require_once "..".DIRECTORY_SEPARATOR."app".DIRECTORY_SEPARATOR."services".DIRECTORY_SEPARATOR."JwtService.php";
 require_once "..".DIRECTORY_SEPARATOR."app".DIRECTORY_SEPARATOR."services".DIRECTORY_SEPARATOR."SecurityFilterChain.php";
+require_once "..".DIRECTORY_SEPARATOR."app".DIRECTORY_SEPARATOR."services".DIRECTORY_SEPARATOR."DocumentSender.php";
+require_once "..".DIRECTORY_SEPARATOR."app".DIRECTORY_SEPARATOR."services".DIRECTORY_SEPARATOR."EmailTemplateRenderer.php";
+require_once "..".DIRECTORY_SEPARATOR."app".DIRECTORY_SEPARATOR."services".DIRECTORY_SEPARATOR."PdfDocumentSender.php";
+require_once "..".DIRECTORY_SEPARATOR."app".DIRECTORY_SEPARATOR."services".DIRECTORY_SEPARATOR."DocxDocumentSender.php";
 require_once '..'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
 require_once  '..'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'helpers'.DIRECTORY_SEPARATOR.'middleware'.DIRECTORY_SEPARATOR.'AuthSecurity.php';

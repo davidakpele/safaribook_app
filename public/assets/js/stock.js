@@ -47,7 +47,8 @@ function getStockList() {
                     `<span  class="company-table-content-display-lg">${book.title}</span>`,
                     `<span class="binding-column">${book.binding}</span>`,
 					`<span style="color:#49474; font-weight:normal" data-product-price=${book.sale_price}>${formatCurrency(book.sale_price)}</span>`,
-					`<div class="dropdown">
+                    `<span class="stock-status ${book.status === 'in-stock' ? 'in-stock' : book.status=== 'out-of-stock' ? 'out-of-stock' : 'publishing-stage'}">${book.status}</span>`,
+                    `<div class="dropdown">
                         <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                             Action&nbsp;&nbsp;<i class="fa fa-caret-down" aria-hidden="true" style="font-size:12px"></i>
                             <span class="sr-only">Dropdown</span>
@@ -66,7 +67,10 @@ function getStockList() {
                     </div>`
                 ]).draw();
                 item_number++;
-			});
+            });
+            
+            document.getElementById('page-loader').style.display = 'none';
+			document.querySelector('.main-edit-container').style.display = 'block';
 		})
         .catch(error => {
             Swal.fire({

@@ -177,12 +177,12 @@ $(document).on('click', ".save-configuration-changes", async function (e) {
                 success: function(response) {
                     var data_array = $.parseJSON(response);
                     if (data_array.status =="success") {
-                        Swal('Success', data_array.message, 'success');
+                        Swal.fire('Success', data_array.message, 'success');
                         setTimeout(function () {
                             window.location.reload(1);
                         }, 500);
                     } else {
-                        Swal({
+                        Swal.fire({
                             title: "Failed",
                             text: data_array.message,
                             type: "error",
@@ -195,7 +195,7 @@ $(document).on('click', ".save-configuration-changes", async function (e) {
                 }
             });
         } catch (error) {
-            Swal({
+            Swal.fire({
                 title: "Failed",
                 text: error,
                 type: "error",

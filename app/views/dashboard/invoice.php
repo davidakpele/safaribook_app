@@ -22,211 +22,229 @@
                 </ol>
             </section>
             <section class="content">
-  <h2>Create New <span class="invoice_type">Invoice</span> </h2>
-  <!-- <hr> -->
-
-  <div id="response" class="alert alert-success" style="display:none;">
-      <a href="#" class="close" data-dismiss="alert">×</a>
-      <div class="message"></div>
-  </div>
-
-  <form method="post" id="create_invoice">
-      <div class="row">
-        <div class="col-md-6 col-xs-12 col-sm-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="float-left">Customer Information</h4>
-                    <div class="d-flex"><b>OR</b> &nbsp;<div class="float-right select-customer"><span class="item-select-link"> Select Existing Customer</span></div></div>
-                    <div class="clear"></div>
+                <h2>Create New <span class="invoice_type">Invoice</span> </h2>
+                <!-- <hr> -->
+                <div id="response" class="alert alert-success" style="display:none;">
+                    <a href="#" class="close" data-dismiss="alert">×</a>
+                    <div class="message"></div>
                 </div>
-                <div class="panel-body form-group form-group-sm">
+
+                <form method="post" id="create_invoice">
                     <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label for="name" style="color:black">Name:*</label>
-                                <input type="text" class="form-control copy-input required customer_name" name="customer_name" id="customer_name" placeholder="Contact Name" tabindex="1">
-                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
-                            </div>
-                            <div class="form-group">
-                                <label for="customer_invoice_no" style="color:black">Invoice Number:*</label>
-                                <input type="text" class="form-control margin-bottom copy-input required customer_invoice_no" name="customer_invoice_no" id="customer_address_1" placeholder="Invoice Number" tabindex="3">	
-                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
-                            </div>
-                            <div class="form-group">
-                                <label for="due_date" style="color:black">Invoice Date:*</label>
-                                <div class="input-group date" id="invoice_due_date">
-                                    <input type="text" class="form-control required due_date" name="invoice_due_date" placeholder="Due Date" data-date-format="DD/MM/YYYY">
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
+                        <div class="col-md-6 col-xs-12 col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="float-left">Customer Information</h4>
+                                    <div class="d-flex"><b>OR</b> &nbsp;<div class="float-right select-customer"><span class="item-select-link"> Select Existing Customer</span></div></div>
+                                    <div class="clear"></div>
                                 </div>
-                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
+                                <div class="panel-body form-group form-group-sm">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label for="name" style="color:black">Name:*</label>
+                                                <input type="text" class="form-control copy-input required customer_name" name="customer_name" id="customer_name" placeholder="Contact Name" tabindex="1">
+                                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="customer_invoice_no" style="color:black">Invoice Number:*</label>
+                                                <input type="text" class="form-control margin-bottom copy-input required customer_invoice_no" name="customer_invoice_no" id="customer_address_1" placeholder="Invoice Number" tabindex="3">	
+                                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="due_date" style="color:black">Invoice Date:*</label>
+                                                <div class="input-group date" id="invoice_due_date">
+                                                    <input type="text" class="form-control required due_date" name="invoice_due_date" placeholder="Due Date" data-date-format="DD/MM/YYYY">
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="form-group no-margin-bottom">
+                                                <label for="" style="color:black">Shipping Via:*</label>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control copy-input" name="customer_address_2" id="customer_address_2" placeholder="Shipping Via" tabindex="4">
+                                                </div>
+                                            </div>
+                                            <div class="form-group margin-bottom">
+                                                <label for="" style="color:black">Customer Reference:*</label>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control copy-input required" name="customer_county" id="customer_county" placeholder="Customer Reference" tabindex="6">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="tel" style="color:black">Telephone:*</label>
+                                                <input type="tel" class="form-control copy-input required customer_telephone" id="customer_telephone" placeholder="+234" >
+                                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-xs-6">
-                            <div class="form-group no-margin-bottom">
-                                <label for="" style="color:black">Shipping Via:*</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control copy-input" name="customer_address_2" id="customer_address_2" placeholder="Shipping Via" tabindex="4">
+                        <div class="col-md-6 col-xs-12 col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4> Invoice To</h4>
                                 </div>
-                            </div>
-                            <div class="form-group margin-bottom">
-                                <label for="" style="color:black">Customer Reference:*</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control copy-input required" name="customer_county" id="customer_county" placeholder="Customer Reference" tabindex="6">
+                                <div class="panel-body form-group form-group-sm">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <label for="name" style="color:black">FullName:*</label>
+                                                <input type="text" class="form-control copy-input required client_name" id="client_name" placeholder="Client full name" >
+                                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="address" style="color:black">Address <small>(Optional)</small>:*</label>
+                                                <div id="address_lines_container">
+                                                    <input type="text" class="form-control copy-input required address-line" id="address-line" placeholder="Client Address / Location" >
+                                                </div>
+                                                
+                                                    <div class="row" id="address_row_container">
+                                                    <!-- dynamic input lines go here -->
+                                                    </div>
+                                                
+                                                <button type="button" class="btn btn-xs btn-success mt-1 add_new_address_line">Add Address Line</button>
+                                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="city" style="color:black">City/Town:*</label>
+                                                <input type="text" class="form-control copy-input required client_city" id="client_city" placeholder="Client City / Town" >
+                                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="telephone" style="color:black">Telephone:*</label>
+                                                <input type="tel" class="form-control copy-input required client_telephone" id="client_telephone" placeholder="+234" >
+                                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                
                             </div>
-                            <div class="form-group">
-                                <label for="tel" style="color:black">Telephone:*</label>
-                                <input type="tel" class="form-control copy-input required customer_telephone" id="customer_telephone" placeholder="+234" >
-                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
-                            </div>
+                            <button type="button" class="btn btn-info payment-details" style="float:right"><span class="glyphicon glyphicon-credit-card" aria-hidden="true" style="color:gray"></span>&nbsp; Select payment details</button>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xs-12 col-sm-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4> Invoice To</h4>
-                </div>
-                <div class="panel-body form-group form-group-sm">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <label for="name" style="color:black">FullName:*</label>
-                                <input type="text" class="form-control copy-input required client_name" id="client_name" placeholder="Client full name" >
-                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
-                            </div>
-                            <div class="form-group">
-                                <label for="city" style="color:black">City/Town:*</label>
-                                <input type="text" class="form-control copy-input required client_city" id="client_city" placeholder="Client City / Town" >
-                                <small class="help-block-error-msg" style="color:#dd4b39;"></small>
-                            </div>
+
+                    
+
+                    <div>
+                        <button id="add-section" type="button" class="btn btn-flat btn-sm btn btn-success add-row">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add New Section
+                        </button>
+                        
+                    </div>
+                    
+                    <!-- / end client details section -->
+                    <div class="input-section">
+                        
+                        <div id="sections-container">
+                            <!-- Sections will be added here dynamically -->
                         </div>
+                        
+                        <div class="action-buttons">
+                            <button id="calculate" type="button" class="btn btn-flat btn-sm btn btn-default add-row"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span>&nbsp; Generate Invoice</button>
+                            <button id="print-invoice" disabled type="button" class="btn btn-flat btn-sm btn btn-primary add-row"><span class="glyphicon glyphicon-print" aria-hidden="true"></span>&nbsp;Print Invoice</button>
+                            <button id="print-invoice" type="button" class="btn btn-flat btn-sm btn btn-primary add-delivery-cost"><i class="fa fa-usd" aria-hidden="true"></i></span>&nbsp;Add Cost of Delivery
+                        </div>
+                    </div>
+                    
+                    <div class="output-section" id="output-section" style="display: none;">
+                        <h2>Invoice Preview</h2>
+                        <div id="invoice-container"></div>
+                    </div>
+                    
+                </form>
+
+                <div class="modal fada" id="select-add-payment-details" tabindex="-1" role="dialog" aria-labelledby="select-add-payment-details" aria-hidden="true">  
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title text-center">Select Bank Details</h4>
+                        <button type="button" class="close close-payment-details" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group" id="bank-select-group">
+                                <select class="form-control" id="bank-select"></select>
+                                <small class="help-block-msg" style="color:#dd4b39;"></small>
+                            </div>	      
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-primary button-payment-details" id="selected">Select</button>
+                        <button type="button" data-dismiss="modal" class="btn close-payment-details">Cancel</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+
+                <div class="modal fada" id="select-customer-users" tabindex="-1" role="dialog" aria-labelledby="select-add-payment-details" aria-hidden="true">  
+                    <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h4 class="modal-title text-center">Select An Existing Customer</h4>
+                        <button type="button" class="close close-select-customer" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table js-basic-example dataTable table-striped table-bordered table-hover" id="user-list-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Designation</th>
+                                        <th>Telephone</th>
+                                        <th>Joined</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                            </tbody>
+                        </table>		      
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn close-select-customer">Cancel</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+
+                <div class="modal fada" id="select-stock-product" tabindex="-1" role="dialog" aria-labelledby="select-add-payment-details" aria-hidden="true">  
+                    <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h4 class="modal-title text-center">Stock Product Table</h4>
+                        <button type="button" class="close close-select-stock-product" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table js-basic-example dataTable table-striped table-bordered table-hover" id="product-list-table">
+                                <thead>
+                                    <tr>
+                                        <th>Item No</th>
+                                        <th>Title</th>
+                                        <th>Binding</th>
+                                        <th>Price</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                            </tbody>
+                        </table>		      
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn close-select-stock-product">Cancel</button>
+                        </div>
+                    </div>
                     </div>
                 </div>
                 
-            </div>
-            <button type="button" class="btn btn-info payment-details" style="float:right"><span class="glyphicon glyphicon-credit-card" aria-hidden="true" style="color:gray"></span>&nbsp; Select payment details</button>
+            </section>
         </div>
-    </div>
-
-    
-
-    <div>
-        <button id="add-section" type="button" class="btn btn-flat btn-sm btn btn-success add-row">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add New Section
-        </button>
-        
-    </div>
-      
-      <!-- / end client details section -->
-      <div class="input-section">
-        
-        <div id="sections-container">
-            <!-- Sections will be added here dynamically -->
-        </div>
-        
-        <div class="action-buttons">
-            <button id="calculate" type="button" class="btn btn-flat btn-sm btn btn-default add-row"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span>&nbsp; Generate Invoice</button>
-            <button id="print-invoice" disabled type="button" class="btn btn-flat btn-sm btn btn-primary add-row"><span class="glyphicon glyphicon-print" aria-hidden="true"></span>&nbsp;Print Invoice</button>
-        </div>
-    </div>
-    
-    <div class="output-section" id="output-section" style="display: none;">
-        <h2>Invoice Preview</h2>
-        <div id="invoice-container"></div>
-    </div>
-    
-  </form>
-
-  <div class="modal fada" id="select-add-payment-details" tabindex="-1" role="dialog" aria-labelledby="select-add-payment-details" aria-hidden="true">  
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          
-          <h4 class="modal-title text-center">Select Bank Details</h4>
-          <button type="button" class="close close-payment-details" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group" id="bank-select-group">
-                <select class="form-control" id="bank-select"></select>
-                <small class="help-block-msg" style="color:#dd4b39;"></small>
-            </div>	      
-        </div>
-        <div class="modal-footer">
-          <button type="button" data-dismiss="modal" class="btn btn-primary button-payment-details" id="selected">Select</button>
-          <button type="button" data-dismiss="modal" class="btn close-payment-details">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="modal fada" id="select-customer-users" tabindex="-1" role="dialog" aria-labelledby="select-add-payment-details" aria-hidden="true">  
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title text-center">Select An Existing Customer</h4>
-          <button type="button" class="close close-select-customer" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-        </div>
-        <div class="modal-body">
-            <table class="table js-basic-example dataTable table-striped table-bordered table-hover" id="user-list-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Designation</th>
-                        <th>Telephone</th>
-                        <th>Joined</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-            </tbody>
-        </table>		      
-        </div>
-        <div class="modal-footer">
-          <button type="button" data-dismiss="modal" class="btn close-select-customer">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="modal fada" id="select-stock-product" tabindex="-1" role="dialog" aria-labelledby="select-add-payment-details" aria-hidden="true">  
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title text-center">Stock Product Table</h4>
-          <button type="button" class="close close-select-stock-product" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-        </div>
-        <div class="modal-body">
-            <table class="table js-basic-example dataTable table-striped table-bordered table-hover" id="product-list-table">
-                <thead>
-                    <tr>
-                        <th>Item No</th>
-                        <th>Title</th>
-                        <th>Binding</th>
-                        <th>Price</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-            </tbody>
-        </table>		      
-        </div>
-        <div class="modal-footer">
-          <button type="button" data-dismiss="modal" class="btn close-select-stock-product">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-</section>
-</div>
     </div>
 <?php include_once 'components/Footer.php';?>
 <script type="module" src="<?=ASSETS?>js/main.js"></script>

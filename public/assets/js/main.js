@@ -19,10 +19,12 @@ var company_detail =
 	company_address:'',
 	company_telephone:'',
 	company_website:'',
-	company_country:''
+    company_country: '',
+    company_city:'',
 }
-	
-var client_name = "", client_city = "";
+let deliveryCost = 0;
+let includeDeliveryCost = false;
+var client_name = "", client_address="", client_city = "", client_telephone="";
 var table, selectedPaymentMethod;
 let description, unitPrice;
 var currentRow;
@@ -46,6 +48,61 @@ $('#invoice_date, #invoice_due_date').datetimepicker({
 	showClose: false,
 	format: dateFormat
 });
+
+function addAddressLine() {
+    const rowContainer = document.getElementById('address_row_container');
+
+    const colDiv = document.createElement('div');
+    colDiv.classList.add('col-md-12', 'mt-2', 'mb-2');
+
+    // Create a flex container
+    const flexWrapper = document.createElement('div');
+    flexWrapper.className = 'd-flex gap-3 align-items-center';
+
+    // Input field
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'Address Line';
+    input.className = 'form-control mr-2 copy-input address-line';
+
+    // Remove button with glyphicon
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-item btn btn-danger btn-xs delete-row';
+    removeBtn.type = 'button';
+    removeBtn.innerHTML = '<i class="fa fa-trash"></i>';
+    removeBtn.onclick = () => {
+        rowContainer.removeChild(colDiv);
+        adjustAddressInputWidths();
+    };
+
+    // Append input and button to flex container
+    flexWrapper.appendChild(input);
+    flexWrapper.appendChild(removeBtn);
+
+    // Add to column
+    colDiv.appendChild(flexWrapper);
+
+    // Add to row
+    rowContainer.appendChild(colDiv);
+
+    // Adjust widths
+    adjustAddressInputWidths();
+}
+
+function adjustAddressInputWidths() {
+    const rowContainer = document.getElementById('address_row_container');
+    const cols = rowContainer.querySelectorAll('.col-md-12, .col-md-6');
+
+    cols.forEach(col => {
+        col.classList.remove('col-md-12', 'col-md-6');
+    });
+
+    const newClass = cols.length === 1 ? 'col-md-12' : 'col-md-6';
+
+    cols.forEach(col => {
+        col.classList.add(newClass);
+    });
+}
 
 
 function formatDateTime(dateString) {
@@ -221,7 +278,6 @@ function addRowEventListeners(row) {
 	const total = quantity * unitPrice;
 	sectionSubtotal += total;
 	
-
     const quantityInput = row.querySelector('.quantity');
     const unitPriceInput = row.querySelector('.unit-price');
     const removeBtn = row.querySelector('.remove-item');
@@ -271,7 +327,7 @@ function formatCurrency(amount) {
 
 function generateInvoice() {
 	const errors = [];
-	payload =  {};
+	payload = "";
 	payload_items = [];
 	$('.manually-added-empty-row').removeClass('hidden');
 
@@ -281,6 +337,7 @@ function generateInvoice() {
 	const invoiceDateInput = document.querySelector(".due_date");
 	const clientNameInput = document.querySelector(".client_name");
 	const clientCityInput = document.querySelector(".client_city");
+	const clientMobileInput = document.querySelector(".client_telephone");
 	// Clear all previous error messages and classes
 	document.querySelectorAll(".form-group").forEach(group => group.classList.remove("has-error"));
 	document.querySelectorAll(".help-block-error-msg").forEach(msg => msg.textContent = "");
@@ -316,25 +373,33 @@ function generateInvoice() {
 	invoice_number = invoiceNumberInput.value;
 	client_name = clientNameInput.value;
 	client_city = clientCityInput.value;
+	client_telephone = clientMobileInput.value;
+	const addressInputs = document.querySelectorAll('.address-line');
+	client_address = Array.from(addressInputs)
+		.map(input => input.value.trim())
+		.filter(val => val !== "")
+		.map(val => val.endsWith(",") ? val : val + ",") 
+		.join("<br/>");
 
 	let html = `
 				<div id="preview_invoice">
 					<div id="preview_invoice" style="font-family: Arial, sans-serif; padding: 20px;">
 						<div style="display: flex; justify-content: space-between; align-items: flex-start;">
 							<div style="width: 50%;">
-								<h4 style="margin: 0; font-size:20px; display:flex">SAFARI BOOKS LIMITED <span style="font-size: 14px;">RC.172479</span></h4>
-								<span style="margin: 2px 0; font-size: 15px;" class="invoice-content">Ile Ori-Detu, No-1Shell Close Onireke</span><br/>
-								<span style="margin: 2px 0; font-size: 15px;" class="invoice-content">Ibadan, Oyo-State</span><br/>
-								<span style="margin: 2px 0; font-size: 15px;" class="invoice-content">Phone: +234(0)7060603020</span><br/>
-								<span style="margin: 2px 0; font-size: 15px;" class="invoice-content">E-mail: info@safaribooks.com.ng</span><br/>
-								<span style="margin: 2px 0; font-size: 15px;" class="invoice-content">Website: www.safaribooks.com.ng</span>
+								<h4 style="margin: 0; font-size:20px; display:flex">${company_detail.company_name}<span style="font-size: 14px;">${company_detail.company_rc}</span></h4>
+								<span style="margin: 2px 0; font-size: 15px;" class="invoice-content">${company_detail.company_address}</span><br/>
+								<span style="margin: 2px 0; font-size: 15px;" class="invoice-content">${company_detail.company_city}</span><br/>
+								<span style="margin: 2px 0; font-size: 15px;" class="invoice-content">Phone: ${company_detail.company_telephone}</span><br/>
+								<span style="margin: 2px 0; font-size: 15px;" class="invoice-content">E-mail: ${company_detail.company_email}</span><br/>
+								<span style="margin: 2px 0; font-size: 15px;" class="invoice-content">Website: ${company_detail.company_website}</span>
+
 
 								<br/><br/><br/>
 								<span style="font-size:12px; font-weight:bold">INVOICE TO</span><br/>
-								<span class="invoice-content">${client_name}<br>${client_city}</span>
+								<span class="invoice-content">${client_name}<br/>${client_address}<br/>${client_city}<br/>TEL: ${client_telephone}</span>
 							</div>
 							<div style="width: 35%; text-align: center;">
-								<img src="${assets_url}images/logo.png" alt="logo" style="max-height: 90px; margin: 0 auto;" />
+								<img src="${base_url}${company_detail.company_logo}" alt="logo" style="max-height: 90px; margin: 0 auto;" />
 							<div style="font-weight: bold; color: gray; font-size: 20px; margin-top: 10px;">
 								SALES INVOICE
 							</div>
@@ -463,10 +528,27 @@ function generateInvoice() {
 				<tr class="empty-row">
 					<td colspan="5"></td>
 				</tr>`;
-			
+				// Add delivery cost if applicable
+				const deliveryInput = document.getElementById('delivery_cost_input');
+				deliveryCost = includeDeliveryCost && deliveryInput.value ? parseFloat(deliveryInput.value) : 0;
+
+				// Always add section subtotal
 				grandTotal += sectionSubtotal;
+
+				// If delivery cost is added, add it too
+				if (deliveryCost > 0) {
+					grandTotal += deliveryCost;
+				}
 			});
-		
+			if (deliveryCost > 0) {
+				html += `
+				<tr class="total-row">
+					<td colspan="2"></td>
+					<td class="centered-discount">Cost of Delivery</td>
+					<td></td>
+					<td>${formatCurrency(deliveryCost)}</td>
+				</tr>`;
+			}
 			// Add grand total
 			html += `
 				<tr class="final-total" id="final-total">
@@ -498,6 +580,10 @@ function generateInvoice() {
 	document.getElementById('invoice-container').innerHTML = html;
 	document.getElementById('output-section').style.display = 'block';
 
+	const addressLines = Array.from(addressInputs)
+		.map(input => input.value.trim())
+		.filter(val => val !== "");
+
 	payload = {
 		"invoice": {
 			"invoice_number": invoice_number,
@@ -507,14 +593,17 @@ function generateInvoice() {
 			"customer_reference": '',
 			"client_name": client_name,
 			"client_city": client_city,
+			"client_telephone":client_telephone,
+			"client_address": addressLines,
 			"invoice_type": "Invoice",
 			"terms": "Due on receipt",
 			"total_amount": parseFloat(grandTotal).toFixed(2),
 			"paymentMethod":selectedPaymentMethod,
+			"deliveryCost": deliveryCost
 		},
-		//working on this
 		"sections": payload_items
 	}
+
 }
 
 // Event listeners
@@ -579,27 +668,29 @@ document.getElementById('print-invoice').addEventListener('click', async () => {
         </head>
         <body>
             ${invoiceTable.outerHTML}
-            <script>
-                window.onload = function() {
-                    window.print();
-                    
-                    // After printing, set up beforeunload handler
-                    window.onafterprint = function() {
-                        // Ask user if they want to save
-                        const shouldSave = confirm('Would you like to save this invoice now?');
-                        
-                        if (shouldSave) {
-                            // Tell the parent window to save
-                            window.opener.postMessage('save_invoice', '*');
-                        }
-                        
-                        // Close after a short delay
-                        setTimeout(() => {
-                            window.close();
-                        }, 100);
-                    };
-                };
-            </script>
+           <script>
+				window.onload = function () {
+					let alreadyHandled = false; // prevent multiple calls
+
+					window.print();
+
+					window.onafterprint = function () {
+						if (alreadyHandled) return;
+						alreadyHandled = true;
+
+						const shouldSave = confirm('Would you like to save this invoice now?');
+
+						if (shouldSave) {
+							window.opener.postMessage('save_invoice', '*');
+						}
+
+						setTimeout(() => {
+							window.close();
+						}, 100);
+					};
+				};
+			</script>
+
         </body>
         </html>
     `);
@@ -766,6 +857,7 @@ function load_app_settings() {
 			company_detail.company_telephone= data.company_telephone;
 			company_detail.company_website= data.company_website;
 			company_detail.company_country= data.company_country;
+            company_detail.company_city = data.company_city;
 
 		}).catch(error => {
 			console.error('Error fetching users list:', error);
@@ -897,12 +989,17 @@ $(document).on('click', '.remove-empty-row', function () {
 	$(this).closest('tr').remove();
 });
 
-function calculateTotal() {
-let total = 0;
-$('.item-total').each(function() {
-	total += parseFloat($(this).val().replace(/[^0-9.-]+/g, '')) || 0;
+$(document).on('click', '.add_new_address_line', function () {
+	addAddressLine();
 });
-$('#total').val(formatCurrency(total, true));
+
+
+function calculateTotal() {
+	let total = 0;
+	$('.item-total').each(function() {
+		total += parseFloat($(this).val().replace(/[^0-9.-]+/g, '')) || 0;
+	});
+	$('#total').val(formatCurrency(total, true));
 }
 
 const calculateItemTotal = () => {
@@ -912,3 +1009,34 @@ const calculateItemTotal = () => {
 	totalInput.value = formatCurrency(total, true);
 	calculateTotal(); 
 }; 
+
+
+$(document).on('click', '.add-delivery-cost', function (e) {
+    e.preventDefault();
+
+    const $button = $(this);
+    let $input = $('#delivery_cost_input');
+
+    if ($input.length === 0) {
+        // Dynamically add input if it doesn't exist
+		const inputField = `
+		<div id="delivery_cost_wrapper" style="margin-top: 10px;">
+			<div class="form-group">
+				<label for="address" style="color:black">Delivery Cost <small>(Optional)</small>:*</label>
+                <input type="number" step="0.01" min="0" id="delivery_cost_input" 
+                    class="form-control" placeholder="Enter Cost of Delivery" 
+                    style="width: 200px;" />
+            </div>
+		</div>
+        `;
+        $button.after(inputField);
+        includeDeliveryCost = true;
+        $button.html('<i class="fa fa-trash"></i> Remove Cost of Delivery');
+    } else {
+        // Toggle visibility/remove
+        $('#delivery_cost_wrapper').remove();
+        includeDeliveryCost = false;
+        $button.html('<i class="fa fa-usd"></i> Add Cost of Delivery');
+    }
+});
+

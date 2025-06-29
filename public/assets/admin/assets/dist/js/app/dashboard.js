@@ -37,7 +37,7 @@ $(document).ready(function(){
 
 	$('#logout').on('click', function(e){
 		e.preventDefault();
-		Swal({
+		Swal.fire({
 			title: "Logout",
 			text: "Are you sure you want to logout?",
 			type: "question",

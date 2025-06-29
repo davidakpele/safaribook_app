@@ -46,7 +46,7 @@ final class DataRepository
     }
 
     public function getAllProducts(){
-        $this->_connect_db->query(/** @lang text */"SELECT `id`, `title`, `binding`, `sale_price` FROM `books` ");
+        $this->_connect_db->query(/** @lang text */"SELECT `id`, `title`, `binding`, `sale_price`, `status` FROM `books` ");
         $row = $this->_connect_db->resultSet();
         if(!empty($row)){
             return $row;
@@ -163,6 +163,8 @@ final class DataRepository
             if (!$saved) {
                 throw new Exception("Failed to save invoice number");
             }
+            $client_address_array = ($invoiceData['invoice']['client_address']);
+            $client_address_json = json_encode($client_address_array);
             // Save invoice header
             $invoiceId = $this->saveInvoiceHeader(
                 $invoiceData['invoice']['invoice_number'],
@@ -172,11 +174,15 @@ final class DataRepository
                 $invoiceData['invoice']['customer_reference'],
                 $invoiceData['invoice']['client_name'],
                 $invoiceData['invoice']['client_city'],
+                $invoiceData['invoice']['client_telephone'], 
+                $client_address_json, 
                 $invoiceData['invoice']['invoice_type'],
                 $invoiceData['invoice']['terms'],
                 $invoiceData['invoice']['total_amount'],
-                $invoiceData['invoice']['paymentMethod']
+                $invoiceData['invoice']['paymentMethod'],
+                $invoiceData['invoice']['deliveryCost']
             );
+            
             
             if (!$invoiceId) {
                 throw new Exception("Failed to save invoice header");
@@ -236,12 +242,13 @@ final class DataRepository
     }
     
     private function saveInvoiceHeader($invoiceNumber, $customerId, $invoiceDate, $shippingVia, 
-                                    $customerReference, $clientName, $clientCity, 
-                                    $invoiceType, $terms, $totalAmount, $paymentMethod) {
+                                    $customerReference, $clientName, $clientCity, $client_telephone,
+                                    $client_address, $invoiceType, $terms, $totalAmount, $paymentMethod, $deliveryCost) {
+        
         $this->_connect_db->query("INSERT INTO invoice (invoice_number, customer_id, invoice_date, shipping_via, 
-                customer_reference, client_name, client_city, invoice_type, terms, total_amount, payment_method_id, `createdAt`)
+                customer_reference, client_name, client_city, client_address, client_telephone, invoice_type, terms, total_amount, delivery_cost, payment_method_id, `createdAt`)
                 VALUES (:invoiceNumber, :customerId, :invoiceDate, :shippingVia, :customerReference, 
-                :clientName, :clientCity, :invoiceType, :terms, :totalAmount, :paymentMethod, NOW())");
+                :clientName, :clientCity, :client_address,  :client_telephone, :invoiceType, :terms, :totalAmount, :deliveryCost, :paymentMethod, NOW())");
         
         $this->_connect_db->bind(':invoiceNumber', $invoiceNumber);
         $this->_connect_db->bind(':customerId', $customerId);
@@ -250,10 +257,13 @@ final class DataRepository
         $this->_connect_db->bind(':customerReference', $customerReference);
         $this->_connect_db->bind(':clientName', $clientName);
         $this->_connect_db->bind(':clientCity', $clientCity);
+        $this->_connect_db->bind(':client_address', $client_address);
+        $this->_connect_db->bind(':client_telephone', $client_telephone);
         $this->_connect_db->bind(':invoiceType', $invoiceType);
         $this->_connect_db->bind(':terms', $terms);
         $this->_connect_db->bind(':totalAmount', $totalAmount);
-        $this->_connect_db->bind(':paymentMethod', $paymentMethod);
+        $this->_connect_db->bind(':paymentMethod', $paymentMethod); 
+        $this->_connect_db->bind(':deliveryCost', $deliveryCost);
         return $this->_connect_db->execute() ? $this->_connect_db->lastInsertId() : false;
     }
     
@@ -465,7 +475,7 @@ final class DataRepository
                     ]
                 ];
             }
-            // Build final response (using object notation for invoice)
+            // Build final response 
             return [
                 'invoice' => [
                     'invoice_number' => $invoice->invoice_number,
@@ -475,6 +485,8 @@ final class DataRepository
                     'customer_reference' => $invoice->customer_reference,
                     'client_name' => $invoice->client_name,
                     'client_city' => $invoice->client_city,
+                    'client_address' =>json_decode($invoice->client_address, true),
+                    'client_telephone' => $invoice->client_telephone,
                     'invoice_type' => $invoice->invoice_type,
                     'terms' => $invoice->terms,
                     'total_amount' => $invoice->total_amount,
@@ -484,6 +496,7 @@ final class DataRepository
                     'office_role_id'=>$invoice->role,
                     'office_role'=>$invoice->role_name,
                     'office_id'=>$invoice->customer_id,
+                    'delivery_cost'=>$invoice->delivery_cost,
 
                 ],
                 'sections' => $formattedSections
@@ -570,11 +583,10 @@ final class DataRepository
     }
 
     public function get_app_settings(){
-        $this->_connect_db->query("SELECT * FROM settings LIMIT 1");
-        $sections = $this->_connect_db->fetchAll();
+        $this->_connect_db->query("SELECT * FROM settings");
+        $sections = $this->_connect_db->single();
         return(!empty($sections)? $sections : null);
     }
-
 
     public function processUpdateInvoice($invoiceData, $invoiceId) {
         try {
@@ -590,6 +602,8 @@ final class DataRepository
             // update invoice number record if you want to track it
             $this->update_invoice_number($invoice_number); 
     
+            $client_address_array = ($invoiceData['invoice']['client_address']);
+            $client_address_json = json_encode($client_address_array);
             // Update invoice header
             $updated = $this->updateInvoiceHeader(
                 $invoiceId,
@@ -600,12 +614,15 @@ final class DataRepository
                 $invoiceData['invoice']['customer_reference'],
                 $invoiceData['invoice']['client_name'],
                 $invoiceData['invoice']['client_city'],
+                $invoiceData['invoice']['client_telephone'], 
+                $client_address_json, 
                 $invoiceData['invoice']['invoice_type'],
                 $invoiceData['invoice']['terms'],
                 $invoiceData['invoice']['total_amount'],
-                $invoiceData['invoice']['paymentMethod']
+                $invoiceData['invoice']['paymentMethod'],
+                $invoiceData['invoice']['deliveryCost']
             );
-    
+            
             if (!$updated) {
                 throw new Exception("Failed to update invoice header");
             }
@@ -662,8 +679,7 @@ final class DataRepository
         }
     }
     
-
-    private function updateInvoiceHeader($id, $invoiceNumber, $customerId, $invoiceDate, $shippingVia, $customerReference, $clientName, $clientCity, $invoiceType, $terms, $totalAmount, $paymentMethod) {
+    private function updateInvoiceHeader($id, $invoiceNumber, $customerId, $invoiceDate, $shippingVia, $customerReference, $clientName, $clientCity, $client_telephone, $client_address, $invoiceType, $terms, $totalAmount, $paymentMethod, $deliveryCost) {
         $this->_connect_db->query("UPDATE invoice SET
             invoice_number = :invoiceNumber,
             customer_id = :customerId,
@@ -672,9 +688,12 @@ final class DataRepository
             customer_reference = :customerReference,
             client_name = :clientName,
             client_city = :clientCity,
+            client_telephone = :client_telephone,
+            client_address =:client_address,
             invoice_type = :invoiceType,
             terms = :terms,
             total_amount = :totalAmount,
+            delivery_cost =:deliveryCost,
             payment_method_id = :paymentMethod,
             updatedAt = NOW()
             WHERE id = :id");
@@ -686,9 +705,12 @@ final class DataRepository
         $this->_connect_db->bind(':customerReference', $customerReference);
         $this->_connect_db->bind(':clientName', $clientName);
         $this->_connect_db->bind(':clientCity', $clientCity);
+        $this->_connect_db->bind(':client_telephone', $client_telephone);
+        $this->_connect_db->bind(':client_address', $client_address);
         $this->_connect_db->bind(':invoiceType', $invoiceType);
         $this->_connect_db->bind(':terms', $terms);
         $this->_connect_db->bind(':totalAmount', $totalAmount);
+        $this->_connect_db->bind(':deliveryCost', $deliveryCost);
         $this->_connect_db->bind(':paymentMethod', $paymentMethod);
         $this->_connect_db->bind(':id', $id);
 

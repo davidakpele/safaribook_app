@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice from {{ company_name }}</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #333333;
+    }
+
+    .email-wrapper {
+      width: 100%;
+      padding: 20px;
+      background-color: #ffffff;
+    }
+
+    .email-content {
+      max-width: 800px;
+      margin: 0 auto;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.03);
+      overflow: hidden;
+    }
+
+    .email-header {
+      background-color: #c70000;
+      color: #ffffff;
+      padding: 30px 40px;
+      text-align: center;
+    }
+
+    .email-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .email-body {
+      padding: 30px 40px;
+    }
+
+    .email-body h2 {
+      color: #c70000;
+      margin-top: 0;
+    }
+
+    .email-body p {
+      line-height: 1.6;
+      margin: 10px 0;
+    }
+
+    .invoice-details {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+
+    .invoice-details p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    .footer {
+      padding: 20px 40px;
+      background-color: #f4f4f4;
+      font-size: 12px;
+      color: #555555;
+    }
+
+    .company-info {
+      text-align: left;
+      font-size: 12px;
+      margin-top: 20px;
+    }
+
+    .company-info p {
+      margin: 3px 0;
+    }
+
+    .footer-center {
+      text-align: center;
+      color: #999999;
+      margin-top: 20px;
+      font-size: 11px;
+    }
+
+    a {
+      color: #c70000;
+      text-decoration: none;
+    }
+    
+    .email-header img {
+      max-height: 40px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="email-content">
+
+      <div class="email-header">
+        <img src="{{ logo_url }}" alt="{{ company_name }} Logo">
+        <h1>Invoice from {{ company_name }} </h1>
+      </div>
+      <div class="email-body">
+        <div class="invoice-details">
+          <p>{{ message }}</p>
+        </div>
+    
+      </div>
+
+      <div class="footer">
+        <div class="company-info">
+          <p>--<br/>
+            Louisa Irabor<br/>
+            Customer Relations/Admin<br/>
+            Safari Books Limited<br/>
+            1,Shell Close,Ile Ori Detu<br/>
+            Onireke, Ibadan<br/>
+            Call +234(0)8036091638<br/>
+            WhatsApp: +234(0)8028909057</p>
+        </div>
+        <div class="footer-center">
+          &copy; 2025 {{ company_name }} . All rights reserved.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -6,7 +6,7 @@
                 <span>Dashboard</span>
             </a>
         </li>
-    
+
         <li class="">
             <a href="<?php echo ROOT.'dashboard/stock'?>">
                 <i class="fa fa-book"></i>
